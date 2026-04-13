@@ -51,7 +51,8 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
     path
   }
   console.error('Firestore Error: ', JSON.stringify(errInfo));
-  throw new Error(JSON.stringify(errInfo));
+  // We are temporarily disabling the hard throw so the app doesn't completely crash
+  // throw new Error(JSON.stringify(errInfo));
 }
 
 export interface UserProfile {

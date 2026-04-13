@@ -78,6 +78,8 @@ export default function Login() {
   const handleGoogleSignIn = async () => {
     try {
       setLoading(true);
+      console.log("ATTENTION: If you get auth/unauthorized-domain, you MUST add this exact domain to Firebase Authorized Domains:");
+      console.log(window.location.hostname);
       await signInWithGoogle(isSignUp ? role : undefined);
       navigate('/dashboard');
     } catch (err: any) {

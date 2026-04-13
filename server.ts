@@ -33,13 +33,15 @@ async function startServer() {
       });
       const token = authResponse.data.token;
 
+      const appUrl = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
+
       // 2. Submit Order
       const orderResponse = await axios.post('https://pay.pesapal.com/v3/api/Transactions/SubmitOrderRequest', {
         id: `order_${Date.now()}`,
         currency: currency || 'UGX',
         amount: amount,
         description: 'Payment for AlphaHunt service',
-        callback_url: `${process.env.APP_URL}/api/payment-callback`,
+        callback_url: `${appUrl}/api/payment-callback`,
         notification_id: 'YOUR_NOTIFICATION_ID',
         billing_address: {
           email_address: email,
@@ -60,6 +62,7 @@ async function startServer() {
   // Pesapal Payment Callback
   app.get("/api/payment-callback", async (req, res) => {
     const { OrderTrackingId, OrderMerchantReference } = req.query;
+    const appUrl = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
     
     try {
       // In a real scenario, you would verify the transaction status with Pesapal here
@@ -67,10 +70,10 @@ async function startServer() {
       console.log("Payment callback received:", { OrderTrackingId, OrderMerchantReference });
       
       // For now, we redirect to the frontend status page
-      res.redirect(`${process.env.APP_URL}/payment-status?status=success&trackingId=${OrderTrackingId}`);
+      res.redirect(`${appUrl}/payment-status?status=success&trackingId=${OrderTrackingId}`);
     } catch (error: any) {
       console.error("Callback error:", error);
-      res.redirect(`${process.env.APP_URL}/payment-status?status=failure`);
+      res.redirect(`${appUrl}/payment-status?status=failure`);
     }
   });
 

@@ -90,46 +90,45 @@ export default function FindCoach() {
     setIsBooking(true);
 
     try {
-      // Simulate M-Pesa payment processing delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // 1. Extract amount from pricing string (e.g. "UGX 50,000/hr" -> 50000)
+      const amountMatch = selectedCoach.pricing.match(/\d+(?:,\d+)*(?:\.\d+)?/);
+      const amount = amountMatch ? parseFloat(amountMatch[0].replace(/,/g, '')) : 50000;
 
-      // 1. Create booking record (you would need a 'bookings' collection and rules)
-      // For now, we'll just send notifications as requested.
-
-      // 2. Notify Coach
-      await addDoc(collection(db, 'notifications'), {
-        userId: selectedCoach.uid,
-        title: 'New Session Booked!',
-        message: `${userProfile?.displayName || 'A user'} booked a ${selectedService} session with you on ${bookingDate} at ${bookingTime}.`,
-        read: false,
-        type: 'booking',
-        createdAt: serverTimestamp()
+      // 2. Initiate real payment via Pesapal
+      const response = await fetch('/api/initiate-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: amount,
+          currency: 'UGX',
+          email: user.email || 'user@example.com',
+          name: userProfile?.displayName || 'AlphaHunt User',
+          phoneNumber: phoneNumber
+        }),
       });
+      
+      const data = await response.json();
+      
+      if (data.redirectUrl) {
+        // 3. Save pending booking to Firestore before redirecting
+        await addDoc(collection(db, 'notifications'), {
+          userId: selectedCoach.uid,
+          title: 'Pending Session Booking',
+          message: `${userProfile?.displayName || 'A user'} is booking a ${selectedService} session with you on ${bookingDate} at ${bookingTime}. Awaiting payment.`,
+          read: false,
+          type: 'booking_pending',
+          createdAt: serverTimestamp()
+        });
 
-      // 3. Notify Seeker
-      await addDoc(collection(db, 'notifications'), {
-        userId: user.uid,
-        title: 'Booking Confirmed',
-        message: `Your ${selectedService} session with ${selectedCoach.displayName} is confirmed for ${bookingDate} at ${bookingTime}. Payment successful via M-Pesa.`,
-        read: false,
-        type: 'booking',
-        createdAt: serverTimestamp()
-      });
+        // Redirect to Pesapal checkout
+        window.location.href = data.redirectUrl;
+      } else {
+        throw new Error(data.error || 'Failed to initiate payment');
+      }
 
-      setBookingSuccess(true);
-      setTimeout(() => {
-        setBookingSuccess(false);
-        setSelectedCoach(null);
-        setSelectedService('');
-        setBookingDate('');
-        setBookingTime('');
-        setPhoneNumber('');
-      }, 3000);
-
-    } catch (error) {
-      handleFirestoreError(error, OperationType.WRITE, 'notifications');
-      alert("Failed to process booking. Please try again.");
-    } finally {
+    } catch (error: any) {
+      console.error("Payment error:", error);
+      alert(`Failed to process booking: ${error.message}`);
       setIsBooking(false);
     }
   };

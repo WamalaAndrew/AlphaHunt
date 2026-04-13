@@ -5,6 +5,7 @@
 
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { FirebaseDebugger } from './components/FirebaseDebugger';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -47,6 +48,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 export default function App() {
   return (
     <AuthProvider>
+      <FirebaseDebugger />
       <Router>
         <Routes>
           <Route path="/" element={<Landing />} />
@@ -93,7 +95,11 @@ export default function App() {
           />
           <Route 
             path="/jobs" 
-            element={<JobBoard />} 
+            element={
+              <ProtectedRoute>
+                <JobBoard />
+              </ProtectedRoute>
+            } 
           />
           <Route 
             path="/jobs/:jobId" 
