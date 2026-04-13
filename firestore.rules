@@ -12,18 +12,23 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
     
+    // Safely check if user document exists and get data
+    function getUserDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
     function isAdmin() {
       return isAuthenticated() && 
-        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && getUserDoc().data.role == 'admin' ||
          (request.auth.token.email == "wamalaandrew632@gmail.com" && request.auth.token.email_verified == true));
     }
 
     function isEmployer() {
-      return isAuthenticated() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'employer';
+      return isAuthenticated() && exists(/databases/$(database)/documents/users/$(request.auth.uid)) && getUserDoc().data.role == 'employer';
     }
 
     function isCoach() {
-      return isAuthenticated() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'coach';
+      return isAuthenticated() && exists(/databases/$(database)/documents/users/$(request.auth.uid)) && getUserDoc().data.role == 'coach';
     }
 
     // ===============================================================
@@ -42,6 +47,11 @@ service cloud.firestore {
       allow create: if isEmployer() && request.resource.data.employerId == request.auth.uid;
       allow update: if (isEmployer() && resource.data.employerId == request.auth.uid) || isAdmin();
       allow delete: if (isEmployer() && resource.data.employerId == request.auth.uid) || isAdmin();
+    }
+    
+    // Explicitly allow read for the collection itself
+    match /jobs {
+      allow read: if true;
     }
 
     match /applications/{applicationId} {
