@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  /* AlphaHunt Primary: Lime Green */
+  --color-lime-accent: #bef264;
+  --color-dark-forest: #062016;
+  
+  --color-primary: #062016;
+  --color-primary-foreground: #ffffff;
+
+  /* Background/Foreground */
+  --color-background: #ffffff;
+  --color-foreground: #062016;
+}
+
+body {
+  @apply bg-white text-slate-900 font-sans;
+}
+
+/* Consistent Card Styling */
+.card {
+  @apply bg-white rounded-3xl border border-slate-100 shadow-sm transition-all hover:shadow-md;
+}
+
+/* Premium Button Styling */
+.premium-button {
+  @apply bg-[#bef264] text-[#062016] rounded-full px-6 py-3 font-bold transition-all hover:bg-[#a3e635] active:scale-95 shadow-sm;
+}
+
+.dark-button {
+  @apply bg-[#062016] text-white rounded-full px-6 py-3 font-bold transition-all hover:bg-[#0a2e20] active:scale-95 shadow-sm;
+}
+
+:root {
+  --background: oklch(0.98 0.005 240);
+  --foreground: oklch(0.145 0.02 240);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0.02 240);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0.02 240);
+  --primary: oklch(0.25 0.03 240); /* Deep Slate-Blue */
+  --primary-foreground: oklch(0.98 0.005 240);
+  --secondary: oklch(0.92 0.01 240);
+  --secondary-foreground: oklch(0.25 0.03 240);
+  --muted: oklch(0.92 0.01 240);
+  --muted-foreground: oklch(0.5 0.02 240);
+  --accent: oklch(0.92 0.01 240);
+  --accent-foreground: oklch(0.25 0.03 240);
+  --destructive: oklch(0.55 0.25 25);
+  --border: oklch(0.85 0.01 240);
+  --input: oklch(0.85 0.01 240);
+  --ring: oklch(0.25 0.03 240);
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: oklch(0.145 0.02 240);
+  --foreground: oklch(0.98 0.005 240);
+  --card: oklch(0.2 0.02 240);
+  --card-foreground: oklch(0.98 0.005 240);
+  --popover: oklch(0.2 0.02 240);
+  --popover-foreground: oklch(0.98 0.005 240);
+  --primary: oklch(0.9 0.01 240);
+  --primary-foreground: oklch(0.2 0.02 240);
+  --secondary: oklch(0.25 0.03 240);
+  --secondary-foreground: oklch(0.98 0.005 240);
+  --muted: oklch(0.25 0.03 240);
+  --muted-foreground: oklch(0.7 0.02 240);
+  --accent: oklch(0.25 0.03 240);
+  --accent-foreground: oklch(0.98 0.005 240);
+  --destructive: oklch(0.6 0.25 25);
+  --border: oklch(0.3 0.02 240);
+  --input: oklch(0.3 0.02 240);
+  --ring: oklch(0.7 0.02 240);
+}
+
+@layer base {
+  * {
+    @apply border-slate-200 outline-slate-400/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}

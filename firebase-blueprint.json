@@ -1,0 +1,173 @@
+{
+  "entities": {
+    "users": {
+      "title": "User Profile",
+      "description": "Stores user profile information for seekers, employers, and coaches.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "role": { "type": "string", "enum": ["seeker", "employer", "coach", "admin"] },
+        "bio": { "type": "string" },
+        "skills": { "type": "array", "items": { "type": "string" } },
+        "nationality": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "jobs": {
+      "title": "Job Posting",
+      "description": "Jobs posted by employers.",
+      "type": "object",
+      "properties": {
+        "employerId": { "type": "string" },
+        "title": { "type": "string" },
+        "company": { "type": "string" },
+        "location": { "type": "string" },
+        "description": { "type": "string" },
+        "requirements": { "type": "array", "items": { "type": "string" } },
+        "skills": { "type": "array", "items": { "type": "string" } },
+        "companySize": { "type": "string" },
+        "industry": { "type": "string" },
+        "salaryRange": { "type": "string" },
+        "type": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["employerId", "title", "company", "location"]
+    },
+    "applications": {
+      "title": "Job Application",
+      "description": "Applications submitted by seekers.",
+      "type": "object",
+      "properties": {
+        "jobId": { "type": "string" },
+        "seekerId": { "type": "string" },
+        "employerId": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "viewed", "shortlisted", "accepted", "rejected"] },
+        "jobTitle": { "type": "string" },
+        "companyName": { "type": "string" },
+        "cvUrl": { "type": "string" },
+        "coverLetter": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["jobId", "seekerId", "employerId", "status"]
+    },
+    "posts": {
+      "title": "Social Post",
+      "description": "Posts in the community feed.",
+      "type": "object",
+      "properties": {
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorPhoto": { "type": "string" },
+        "authorRole": { "type": "string" },
+        "content": { "type": "string" },
+        "likes": { "type": "array", "items": { "type": "string" } },
+        "commentsCount": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["authorId", "content"]
+    },
+    "notifications": {
+      "title": "Notification",
+      "description": "User notifications.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "read": { "type": "boolean" },
+        "type": { "type": "string" },
+        "link": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "message", "read"]
+    },
+    "savedJobs": {
+      "title": "Saved Job",
+      "description": "Jobs bookmarked by users.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "jobId": { "type": "string" },
+        "jobTitle": { "type": "string" },
+        "company": { "type": "string" },
+        "location": { "type": "string" },
+        "type": { "type": "string" },
+        "isLocal": { "type": "boolean" },
+        "url": { "type": "string" },
+        "savedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "jobId"]
+    },
+    "jobAlerts": {
+      "title": "Job Alert",
+      "description": "Alert criteria for new jobs.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "skills": { "type": "array", "items": { "type": "string" } },
+        "location": { "type": "string" },
+        "industry": { "type": "string" },
+        "type": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId"]
+    },
+    "coachProfiles": {
+      "title": "Coach Profile",
+      "description": "Detailed profile for career coaches.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "title": { "type": "string" },
+        "bio": { "type": "string" },
+        "services": { "type": "array", "items": { "type": "string" } },
+        "pricing": { "type": "string" },
+        "linkedinUrl": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "title", "bio"]
+    },
+    "chats": {
+      "title": "Chat Conversation",
+      "description": "Direct messaging between users.",
+      "type": "object",
+      "properties": {
+        "participants": { "type": "array", "items": { "type": "string" } },
+        "participantDetails": { "type": "object" },
+        "lastMessage": { "type": "string" },
+        "lastMessageTime": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["participants", "updatedAt"]
+    },
+    "messages": {
+      "title": "Chat Message",
+      "description": "Individual messages within a chat.",
+      "type": "object",
+      "properties": {
+        "text": { "type": "string" },
+        "senderId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["text", "senderId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "users", "description": "User profiles" },
+    "/jobs/{jobId}": { "schema": "jobs", "description": "Job postings" },
+    "/applications/{applicationId}": { "schema": "applications", "description": "Job applications" },
+    "/posts/{postId}": { "schema": "posts", "description": "Community posts" },
+    "/notifications/{notificationId}": { "schema": "notifications", "description": "User notifications" },
+    "/savedJobs/{savedJobId}": { "schema": "savedJobs", "description": "Saved jobs" },
+    "/jobAlerts/{alertId}": { "schema": "jobAlerts", "description": "Job alerts" },
+    "/coachProfiles/{coachId}": { "schema": "coachProfiles", "description": "Coach profiles" },
+    "/chats/{chatId}": { "schema": "chats", "description": "Direct chat conversations" },
+    "/chats/{chatId}/messages/{messageId}": { "schema": "messages", "description": "Messages in a chat" }
+  }
+}
