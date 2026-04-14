@@ -20,6 +20,8 @@ export default function CoachProfile() {
   const [services, setServices] = useState('');
   const [pricing, setPricing] = useState('');
   const [linkedinUrl, setLinkedinUrl] = useState('');
+  const [availability, setAvailability] = useState('');
+  const [testimonials, setTestimonials] = useState('');
 
   useEffect(() => {
     fetchProfile();
@@ -37,6 +39,8 @@ export default function CoachProfile() {
         setServices(data.services?.join('\n') || '');
         setPricing(data.pricing || '');
         setLinkedinUrl(data.linkedinUrl || '');
+        setAvailability(data.availability || '');
+        setTestimonials(data.testimonials?.join('\n\n') || '');
       }
     } catch (error) {
       console.error("Error fetching coach profile:", error);
@@ -57,6 +61,7 @@ export default function CoachProfile() {
       const docSnap = await getDoc(docRef);
       
       const servicesArray = services.split('\n').filter(s => s.trim() !== '');
+      const testimonialsArray = testimonials.split('\n\n').filter(t => t.trim() !== '');
       
       if (docSnap.exists()) {
         await setDoc(docRef, {
@@ -66,6 +71,8 @@ export default function CoachProfile() {
           services: servicesArray,
           pricing,
           linkedinUrl,
+          availability,
+          testimonials: testimonialsArray,
           updatedAt: serverTimestamp()
         }, { merge: true });
       } else {
@@ -76,6 +83,8 @@ export default function CoachProfile() {
           services: servicesArray,
           pricing,
           linkedinUrl,
+          availability,
+          testimonials: testimonialsArray,
           updatedAt: serverTimestamp(),
           createdAt: serverTimestamp()
         });
@@ -159,6 +168,16 @@ export default function CoachProfile() {
                   <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">LinkedIn URL (Optional)</label>
                   <input type="url" value={linkedinUrl} onChange={e => setLinkedinUrl(e.target.value)} className="w-full border border-[#062016]/10 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#bef264] outline-none font-medium" placeholder="https://linkedin.com/in/yourprofile" />
                 </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Availability</label>
+                <input type="text" required value={availability} onChange={e => setAvailability(e.target.value)} className="w-full border border-[#062016]/10 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#bef264] outline-none font-medium" placeholder="e.g. Mon-Fri, 9am - 5pm EAT" />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Client Testimonials (Separate each with a blank line)</label>
+                <textarea value={testimonials} onChange={e => setTestimonials(e.target.value)} rows={5} className="w-full border border-[#062016]/10 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#bef264] outline-none font-medium resize-none" placeholder='"AlphaHunt helped me land my dream job!" - Sarah M.&#10;&#10;"The interview prep was invaluable." - John D.'></textarea>
               </div>
 
               <div className="pt-6 flex items-center justify-end gap-6">

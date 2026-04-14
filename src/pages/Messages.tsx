@@ -1,14 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { db } from '../firebase';
+import { db, storage } from '../firebase';
 import { collection, query, where, getDocs, addDoc, serverTimestamp, orderBy, onSnapshot, doc, updateDoc, getDoc } from 'firebase/firestore';
-import { Send, ArrowLeft, Search, User, Clock, Image as ImageIcon, Video } from 'lucide-react';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { Send, ArrowLeft, Search, User, Clock, Image as ImageIcon, Video, X } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { handleFirestoreError, OperationType } from '../contexts/AuthContext';
 
 interface Message {
   id: string;
   text: string;
+  imageUrl?: string;
   senderId: string;
   createdAt: any;
 }
@@ -33,6 +35,11 @@ export default function Messages() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Image upload state
+  const [imageUrl, setImageUrl] = useState('');
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Handle incoming chat initialization from other pages
   useEffect(() => {
@@ -142,24 +149,47 @@ export default function Messages() {
     }, 100);
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user || !activeChat) return;
+
+    setUploadingImage(true);
+    try {
+      const storageRef = ref(storage, `chats/${activeChat.id}/${user.uid}_${Date.now()}_${file.name}`);
+      await uploadBytes(storageRef, file);
+      const downloadUrl = await getDownloadURL(storageRef);
+      setImageUrl(downloadUrl);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Failed to upload image. Please try again.");
+    } finally {
+      setUploadingImage(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim() || !activeChat || !user) return;
+    if ((!newMessage.trim() && !imageUrl) || !activeChat || !user) return;
 
     const messageText = newMessage.trim();
+    const currentImageUrl = imageUrl;
+    
     setNewMessage('');
+    setImageUrl('');
 
     try {
       // Add message
       await addDoc(collection(db, `chats/${activeChat.id}/messages`), {
         text: messageText,
+        imageUrl: currentImageUrl || null,
         senderId: user.uid,
         createdAt: serverTimestamp()
       });
 
       // Update chat last message
       await updateDoc(doc(db, 'chats', activeChat.id), {
-        lastMessage: messageText,
+        lastMessage: currentImageUrl ? '📷 Image' : messageText,
         lastMessageTime: serverTimestamp(),
         updatedAt: serverTimestamp()
       });
@@ -322,7 +352,14 @@ export default function Messages() {
                             : 'bg-white border border-slate-200 text-slate-800 rounded-bl-sm shadow-sm'
                         }`}
                       >
-                        <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                        {msg.imageUrl && (
+                          <div className="mb-2 rounded-xl overflow-hidden">
+                            <img src={msg.imageUrl} alt="Shared image" className="max-w-full h-auto max-h-64 object-cover" />
+                          </div>
+                        )}
+                        {msg.text && (
+                          <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                        )}
                       </div>
                       {showTime && (
                         <span className="text-[10px] text-slate-400 mt-1 px-1">
@@ -337,8 +374,39 @@ export default function Messages() {
 
               {/* Input Area */}
               <div className="p-4 border-t border-slate-100 bg-white rounded-b-2xl">
+                {imageUrl && (
+                  <div className="relative mb-3 inline-block">
+                    <img src={imageUrl} alt="Upload preview" className="h-24 rounded-xl border border-slate-200 object-cover" />
+                    <button 
+                      type="button"
+                      onClick={() => setImageUrl('')}
+                      className="absolute -top-2 -right-2 bg-white text-rose-500 rounded-full p-1 shadow-md border border-slate-100 hover:bg-rose-50 transition-colors"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
                 <form onSubmit={handleSendMessage} className="flex items-end gap-2">
                   <div className="flex-1 bg-slate-50 border border-slate-200 rounded-2xl flex items-end p-1 focus-within:ring-2 focus-within:ring-slate-400 focus-within:border-slate-400 transition-all">
+                    <input 
+                      type="file" 
+                      ref={fileInputRef} 
+                      onChange={handleImageUpload} 
+                      accept="image/*" 
+                      className="hidden" 
+                    />
+                    <button 
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={uploadingImage}
+                      className="p-2.5 text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 rounded-xl transition-colors disabled:opacity-50"
+                    >
+                      {uploadingImage ? (
+                        <div className="w-5 h-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
+                      ) : (
+                        <ImageIcon className="w-5 h-5" />
+                      )}
+                    </button>
                     <textarea
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
@@ -356,7 +424,7 @@ export default function Messages() {
                   </div>
                   <button 
                     type="submit"
-                    disabled={!newMessage.trim()}
+                    disabled={(!newMessage.trim() && !imageUrl) || uploadingImage}
                     className="p-3 bg-slate-800 hover:bg-slate-900 text-white rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                   >
                     <Send className="w-5 h-5" />

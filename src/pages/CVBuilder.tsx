@@ -127,8 +127,8 @@ export default function CVBuilder() {
     }));
   };
 
-  const enhanceWithAI = async (type: 'summary' | 'experience', id?: string) => {
-    setIsEnhancing(id || 'summary');
+  const enhanceWithAI = async (type: 'summary' | 'experience' | 'skills', id?: string) => {
+    setIsEnhancing(id || type);
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
       
@@ -138,6 +138,8 @@ export default function CVBuilder() {
       } else if (type === 'experience' && id) {
         const exp = cvData.experience.find(e => e.id === id);
         prompt = `Rewrite the following job description bullet points to be more impactful, using strong action verbs and highlighting achievements. Format as a clean bulleted list. Return ONLY the rewritten text.\n\nRole: ${exp?.title}\nCompany: ${exp?.company}\nCurrent description:\n${exp?.description}`;
+      } else if (type === 'skills') {
+        prompt = `Review the following list of skills. Organize them, remove duplicates, and suggest 2-3 highly relevant professional skills that might be missing based on the current list. Format as a clean, comma-separated list. Return ONLY the final comma-separated list.\n\nCurrent skills: ${cvData.skills}`;
       }
 
       const response = await ai.models.generateContent({
@@ -151,6 +153,8 @@ export default function CVBuilder() {
         handlePersonalChange('summary', enhancedText);
       } else if (type === 'experience' && id) {
         handleExperienceChange(id, 'description', enhancedText);
+      } else if (type === 'skills') {
+        setCvData(prev => ({ ...prev, skills: enhancedText }));
       }
     } catch (error) {
       console.error("Error enhancing with AI:", error);
@@ -426,7 +430,17 @@ export default function CVBuilder() {
 
             {activeTab === 'skills' && (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <h2 className="text-2xl font-extrabold text-[#062016] tracking-tight">Skills</h2>
+                <div className="flex items-center justify-between">
+                  <h2 className="text-2xl font-extrabold text-[#062016] tracking-tight">Skills</h2>
+                  <button 
+                    onClick={() => enhanceWithAI('skills')}
+                    disabled={isEnhancing === 'skills' || !cvData.skills}
+                    className="text-xs font-bold text-[#062016] hover:text-black flex items-center gap-1.5 disabled:opacity-50"
+                  >
+                    {isEnhancing === 'skills' ? <Spinner className="w-3 h-3" /> : <Sparkles className="w-3 h-3 text-[#bef264]" />}
+                    {isEnhancing === 'skills' ? 'Enhancing...' : 'AI Enhance'}
+                  </button>
+                </div>
                 <div className="space-y-1.5">
                   <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">List your key skills (comma separated)</label>
                   <textarea 

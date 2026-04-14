@@ -15,6 +15,8 @@ interface CoachProfile {
   services: string[];
   pricing: string;
   linkedinUrl?: string;
+  availability?: string;
+  testimonials?: string[];
   displayName?: string; // We'll need to fetch this from the users collection
   photoURL?: string;
 }
@@ -30,7 +32,6 @@ export default function FindCoach() {
   const [selectedService, setSelectedService] = useState('');
   const [bookingDate, setBookingDate] = useState('');
   const [bookingTime, setBookingTime] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
   const [isBooking, setIsBooking] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
@@ -90,45 +91,40 @@ export default function FindCoach() {
     setIsBooking(true);
 
     try {
-      // 1. Extract amount from pricing string (e.g. "UGX 50,000/hr" -> 50000)
-      const amountMatch = selectedCoach.pricing.match(/\d+(?:,\d+)*(?:\.\d+)?/);
-      const amount = amountMatch ? parseFloat(amountMatch[0].replace(/,/g, '')) : 50000;
-
-      // 2. Initiate real payment via Pesapal
-      const response = await fetch('/api/initiate-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: amount,
-          currency: 'UGX',
-          email: user.email || 'user@example.com',
-          name: userProfile?.displayName || 'AlphaHunt User',
-          phoneNumber: phoneNumber
-        }),
+      // Bypass payment for now (marketing phase)
+      
+      // Save confirmed booking to Firestore
+      await addDoc(collection(db, 'bookings'), {
+        coachId: selectedCoach.uid,
+        seekerId: user.uid,
+        seekerName: userProfile?.displayName || 'A user',
+        service: selectedService,
+        date: bookingDate,
+        time: bookingTime,
+        status: 'confirmed', // Auto-confirm for now
+        createdAt: serverTimestamp()
       });
-      
-      const data = await response.json();
-      
-      if (data.redirectUrl) {
-        // 3. Save pending booking to Firestore before redirecting
-        await addDoc(collection(db, 'notifications'), {
-          userId: selectedCoach.uid,
-          title: 'Pending Session Booking',
-          message: `${userProfile?.displayName || 'A user'} is booking a ${selectedService} session with you on ${bookingDate} at ${bookingTime}. Awaiting payment.`,
-          read: false,
-          type: 'booking_pending',
-          createdAt: serverTimestamp()
-        });
 
-        // Redirect to Pesapal checkout
-        window.location.href = data.redirectUrl;
-      } else {
-        throw new Error(data.error || 'Failed to initiate payment');
-      }
+      // Send notification to coach
+      await addDoc(collection(db, 'notifications'), {
+        userId: selectedCoach.uid,
+        title: 'New Session Booked!',
+        message: `${userProfile?.displayName || 'A user'} has booked a ${selectedService} session with you on ${bookingDate} at ${bookingTime}.`,
+        read: false,
+        type: 'booking_confirmed',
+        createdAt: serverTimestamp()
+      });
+
+      setBookingSuccess(true);
+      setTimeout(() => {
+        setBookingSuccess(false);
+        setSelectedCoach(null);
+      }, 3000);
 
     } catch (error: any) {
-      console.error("Payment error:", error);
+      console.error("Booking error:", error);
       alert(`Failed to process booking: ${error.message}`);
+    } finally {
       setIsBooking(false);
     }
   };
@@ -210,6 +206,24 @@ export default function FindCoach() {
                     )}
                   </ul>
                 </div>
+
+                {coach.availability && (
+                  <div className="mb-6">
+                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5" /> Availability
+                    </h4>
+                    <p className="text-sm text-slate-700 font-medium">{coach.availability}</p>
+                  </div>
+                )}
+
+                {coach.testimonials && coach.testimonials.length > 0 && (
+                  <div className="mb-6 bg-amber-50 p-4 rounded-xl border border-amber-100">
+                    <h4 className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                      <Star className="w-3.5 h-3.5" /> Client Feedback
+                    </h4>
+                    <p className="text-sm text-slate-700 italic line-clamp-2">"{coach.testimonials[0]}"</p>
+                  </div>
+                )}
 
                 <div className="flex items-center justify-between mt-auto pt-5 border-t border-slate-100">
                   <span className="text-base font-bold text-slate-900">{coach.pricing}</span>
@@ -315,24 +329,13 @@ export default function FindCoach() {
 
                   <div className="pt-4 border-t border-slate-100">
                     <h4 className="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
-                      <CreditCard className="w-4 h-4 text-amber-600" /> Mobile Money Payment
+                      <CreditCard className="w-4 h-4 text-emerald-600" /> Payment Information
                     </h4>
-                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4 flex justify-between items-center">
-                      <span className="text-sm font-medium text-slate-600">Amount Due:</span>
-                      <span className="font-bold text-slate-900 text-lg">{selectedCoach.pricing}</span>
+                    <div className="bg-emerald-50 p-4 rounded-xl border border-emerald-100 mb-4 flex justify-between items-center">
+                      <span className="text-sm font-medium text-emerald-800">Special Offer:</span>
+                      <span className="font-bold text-emerald-700 text-lg">Free (Limited Time)</span>
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-1">MTN MoMo / Airtel Money Number</label>
-                      <input 
-                        type="tel" 
-                        required
-                        placeholder="e.g. 077X XXX XXX or 075X XXX XXX"
-                        value={phoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                        className="w-full border border-slate-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-slate-400"
-                      />
-                      <p className="text-xs text-slate-500 mt-2">You will receive a payment prompt on your phone to enter your PIN.</p>
-                    </div>
+                    <p className="text-xs text-slate-500 mt-2">Payment is currently waived for our promotional period. Enjoy your session!</p>
                   </div>
 
                   <div className="pt-4">
@@ -344,10 +347,10 @@ export default function FindCoach() {
                       {isBooking ? (
                         <>
                           <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          Processing Payment...
+                          Booking Session...
                         </>
                       ) : (
-                        `Pay & Book Session`
+                        `Book Session Now`
                       )}
                     </button>
                   </div>

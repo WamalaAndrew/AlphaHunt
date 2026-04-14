@@ -138,10 +138,11 @@ export default function Landing() {
           {/* Background Image with Overlay */}
           <div className="absolute inset-0 z-0">
             <img 
-              src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=2000" 
+              src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=60&w=1600" 
               alt="Vibrant Office Community" 
               className="w-full h-full object-cover object-right md:object-center"
               referrerPolicy="no-referrer"
+              loading="eager"
             />
             <div className="absolute inset-0 bg-[#062016]/60 md:bg-transparent"></div>
             <div className="absolute inset-0 bg-gradient-to-b from-[#062016]/90 via-[#062016]/60 to-[#062016]/90 md:bg-gradient-to-r md:from-[#062016] md:via-[#062016]/80 md:to-transparent"></div>
@@ -325,10 +326,11 @@ export default function Landing() {
               <div className="bg-[#062016] rounded-[3rem] p-8 text-white relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-[#bef264]/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
                 <img 
-                  src="https://storage.googleapis.com/test-media-api-v2-prod-uploads/67fc009c-2f3b-4786-896e-57843b0709a3.png" 
+                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=60&w=800" 
                   alt="Professionals collaborating" 
                   className="rounded-2xl w-full mb-8 shadow-lg object-cover aspect-[4/3]"
                   referrerPolicy="no-referrer"
+                  loading="lazy"
                 />
                 <h3 className="text-2xl font-bold mb-4">Made for professionals <span className="text-[#bef264]">Accelerate your career</span> into a true industry leader.</h3>
                 <button onClick={handleAction} className="bg-[#bef264] text-[#062016] px-6 py-3 rounded-full font-bold text-sm">Upload Resume</button>
@@ -404,7 +406,7 @@ export default function Landing() {
                   <div key={i} className="card p-6 flex flex-col justify-between group">
                     <div>
                       <div className="flex justify-between items-start mb-6">
-                        <img src={job.logo} alt={job.company} className="w-12 h-12 rounded-xl object-cover" referrerPolicy="no-referrer" />
+                        <img src={job.logo} alt={job.company} className="w-12 h-12 rounded-xl object-cover" referrerPolicy="no-referrer" loading="lazy" />
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{job.location}</span>
                       </div>
                       <h4 className="text-lg font-bold text-[#062016] mb-1 group-hover:text-indigo-600 transition-colors">{job.title}</h4>
@@ -439,7 +441,7 @@ export default function Landing() {
                       { name: 'Intel', loc: 'London, UK', logo: 'https://picsum.photos/seed/i1/40/40' },
                     ].map((comp, i) => (
                       <div key={i} className="flex items-center gap-4">
-                        <img src={comp.logo} alt={comp.name} className="w-10 h-10 rounded-full object-cover" referrerPolicy="no-referrer" />
+                        <img src={comp.logo} alt={comp.name} className="w-10 h-10 rounded-full object-cover" referrerPolicy="no-referrer" loading="lazy" />
                         <div>
                           <h5 className="text-sm font-bold text-[#062016]">{comp.name}</h5>
                           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{comp.loc}</p>
@@ -477,7 +479,7 @@ export default function Landing() {
               ].map((profile, i) => (
                 <div key={i} className="min-w-[280px] group cursor-pointer" onClick={handleAction}>
                   <div className="relative rounded-[2.5rem] overflow-hidden mb-6 aspect-[4/5]">
-                    <img src={profile.img} alt={profile.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" referrerPolicy="no-referrer" />
+                    <img src={profile.img} alt={profile.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" referrerPolicy="no-referrer" loading="lazy" />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#062016]/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-8">
                       <div className="flex gap-2">
                         <button onClick={(e) => { e.stopPropagation(); handleAction(); }} className="bg-white/20 backdrop-blur-md p-2 rounded-full text-white"><Twitter className="w-4 h-4" /></button>
@@ -511,7 +513,7 @@ export default function Landing() {
                 <div key={i} className="bg-white rounded-3xl p-8 text-left shadow-sm border border-slate-100">
                   <p className="text-slate-600 text-sm leading-relaxed mb-8 italic">"{t.text}"</p>
                   <div className="flex items-center gap-4">
-                    <img src={`https://picsum.photos/seed/u${i}/40/40`} alt={t.name} className="w-10 h-10 rounded-full object-cover" referrerPolicy="no-referrer" />
+                    <img src={`https://picsum.photos/seed/u${i}/40/40`} alt={t.name} className="w-10 h-10 rounded-full object-cover" referrerPolicy="no-referrer" loading="lazy" />
                     <div>
                       <h6 className="text-sm font-bold text-[#062016]">{t.name}</h6>
                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t.role}</p>
@@ -545,7 +547,7 @@ export default function Landing() {
               ].map((blog, i) => (
                 <div key={i} className="group cursor-pointer" onClick={handleAction}>
                   <div className="rounded-[2.5rem] overflow-hidden mb-6 aspect-[4/3]">
-                    <img src={blog.img} alt={blog.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" referrerPolicy="no-referrer" />
+                    <img src={blog.img} alt={blog.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" referrerPolicy="no-referrer" loading="lazy" />
                   </div>
                   <h4 className="text-xl font-bold text-[#062016] mb-3 group-hover:text-indigo-600 transition-colors">{blog.title}</h4>
                   <div className="flex items-center gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
@@ -568,19 +570,26 @@ export default function Landing() {
               </div>
               <h3 className="text-3xl font-bold mb-12">Integrations with your <br /> Favorite Apps</h3>
               <div className="grid grid-cols-3 gap-4">
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className="bg-white/10 backdrop-blur-md border border-white/10 p-6 rounded-2xl flex items-center justify-center">
-                    <div className="w-10 h-10 bg-white rounded-lg opacity-80"></div>
+                {[
+                  'https://picsum.photos/seed/slack/100/100',
+                  'https://picsum.photos/seed/zoom/100/100',
+                  'https://picsum.photos/seed/google/100/100',
+                  'https://picsum.photos/seed/notion/100/100',
+                  'https://picsum.photos/seed/figma/100/100',
+                  'https://picsum.photos/seed/github/100/100'
+                ].map((imgUrl, i) => (
+                  <div key={i} className="bg-white/10 backdrop-blur-md border border-white/10 p-4 rounded-2xl flex items-center justify-center">
+                    <img src={imgUrl} alt="Integration" className="w-12 h-12 rounded-xl object-cover opacity-90 hover:opacity-100 transition-opacity" referrerPolicy="no-referrer" loading="lazy" />
                   </div>
                 ))}
               </div>
             </div>
             
             <div>
-              <span className="bg-slate-100 text-[#062016] px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6 inline-block">Career</span>
-              <h2 className="text-4xl font-extrabold text-[#062016] mb-6 leading-tight">Join to Help Businesses <br /> for Growth</h2>
-              <p className="text-slate-500 font-medium mb-10 leading-relaxed">Post your job today and quickly connect with top talent. Our user-friendly platform streamlines hiring.</p>
-              <button onClick={handleAction} className="bg-[#bef264] text-[#062016] px-8 py-3 rounded-full font-bold text-sm shadow-lg">Explore Careers</button>
+              <span className="bg-white/10 text-white px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6 inline-block border border-white/20">Career</span>
+              <h2 className="text-4xl font-extrabold text-white mb-6 leading-tight">Join to Help Businesses <br /> for Growth</h2>
+              <p className="text-slate-300 font-medium mb-10 leading-relaxed">Post your job today and quickly connect with top talent. Our user-friendly platform streamlines hiring.</p>
+              <button onClick={handleAction} className="bg-[#bef264] text-[#062016] px-8 py-3 rounded-full font-bold text-sm shadow-lg hover:bg-[#a3e635] transition-colors">Explore Careers</button>
             </div>
           </div>
         </section>
@@ -644,9 +653,9 @@ export default function Landing() {
                 </p>
                 <div className="flex items-center gap-4">
                   <div className="flex -space-x-4">
-                    <img src="https://picsum.photos/seed/user1/100/100" alt="User" className="w-12 h-12 rounded-full border-2 border-white" referrerPolicy="no-referrer" />
-                    <img src="https://picsum.photos/seed/user2/100/100" alt="User" className="w-12 h-12 rounded-full border-2 border-white" referrerPolicy="no-referrer" />
-                    <img src="https://picsum.photos/seed/user3/100/100" alt="User" className="w-12 h-12 rounded-full border-2 border-white" referrerPolicy="no-referrer" />
+                    <img src="https://picsum.photos/seed/user1/100/100" alt="User" className="w-12 h-12 rounded-full border-2 border-white" referrerPolicy="no-referrer" loading="lazy" />
+                    <img src="https://picsum.photos/seed/user2/100/100" alt="User" className="w-12 h-12 rounded-full border-2 border-white" referrerPolicy="no-referrer" loading="lazy" />
+                    <img src="https://picsum.photos/seed/user3/100/100" alt="User" className="w-12 h-12 rounded-full border-2 border-white" referrerPolicy="no-referrer" loading="lazy" />
                   </div>
                   <div className="text-sm font-bold">
                     <span className="text-[#062016]">10,000+</span><br />
@@ -663,10 +672,11 @@ export default function Landing() {
               >
                 <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shadow-[#062016]/10 relative">
                   <img 
-                    src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=1200" 
+                    src="https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=60&w=800" 
                     alt="Community Vibe" 
                     className="w-full h-full object-cover"
                     referrerPolicy="no-referrer"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#062016]/80 via-transparent to-transparent"></div>
                   <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end">
@@ -751,8 +761,8 @@ export default function Landing() {
             <div>
               <h5 className="font-bold text-[#062016] mb-6">Support</h5>
               <ul className="space-y-4 text-sm font-bold text-slate-500">
-                <li><button onClick={handleAction} className="hover:text-[#062016]">How It Work</button></li>
-                <li><button onClick={handleAction} className="hover:text-[#062016]">Features</button></li>
+                <li><button onClick={() => scrollToSection('home')} className="hover:text-[#062016]">How It Works</button></li>
+                <li><button onClick={() => scrollToSection('features')} className="hover:text-[#062016]">Features</button></li>
                 <li><button onClick={handleAction} className="hover:text-[#062016]">Pricing</button></li>
                 <li><button onClick={handleAction} className="hover:text-[#062016]">Download</button></li>
               </ul>
@@ -761,18 +771,18 @@ export default function Landing() {
             <div>
               <h5 className="font-bold text-[#062016] mb-6">Useful Links</h5>
               <ul className="space-y-4 text-sm font-bold text-slate-500">
-                <li><button onClick={handleAction} className="hover:text-[#062016]">About</button></li>
-                <li><button onClick={handleAction} className="hover:text-[#062016]">Services</button></li>
-                <li><button onClick={handleAction} className="hover:text-[#062016]">Blog</button></li>
-                <li><button onClick={handleAction} className="hover:text-[#062016]">Contact</button></li>
+                <li><button onClick={() => scrollToSection('home')} className="hover:text-[#062016]">About</button></li>
+                <li><button onClick={() => scrollToSection('jobs')} className="hover:text-[#062016]">Services</button></li>
+                <li><button onClick={() => scrollToSection('blog')} className="hover:text-[#062016]">Blog</button></li>
+                <li><button onClick={() => scrollToSection('contact')} className="hover:text-[#062016]">Contact</button></li>
               </ul>
             </div>
             
             <div>
-              <h5 className="font-bold text-[#062016] mb-6">Support</h5>
+              <h5 className="font-bold text-[#062016] mb-6">Legal</h5>
               <ul className="space-y-4 text-sm font-bold text-slate-500">
-                <li><button onClick={handleAction} className="hover:text-[#062016]">FAQS</button></li>
-                <li><button onClick={handleAction} className="hover:text-[#062016]">Term & Conditions</button></li>
+                <li><button onClick={() => scrollToSection('faq')} className="hover:text-[#062016]">FAQS</button></li>
+                <li><button onClick={handleAction} className="hover:text-[#062016]">Terms & Conditions</button></li>
                 <li><button onClick={handleAction} className="hover:text-[#062016]">Privacy Policy</button></li>
                 <li><button onClick={handleAction} className="hover:text-[#062016]">Help Center</button></li>
               </ul>

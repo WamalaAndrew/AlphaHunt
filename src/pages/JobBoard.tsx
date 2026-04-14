@@ -57,12 +57,14 @@ export default function JobBoard() {
       // Fetch Firestore jobs
       const q = query(collection(db, 'jobs'));
       const querySnapshot = await getDocs(q);
-      const firestoreJobs = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date(),
-        isLocal: true
-      })) as any[];
+      const firestoreJobs = querySnapshot.docs
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate() || new Date(),
+          isLocal: true
+        }))
+        .filter((job: any) => job.status !== 'pending_payment') as any[];
 
       // Fetch Adzuna jobs
       const realJobs = await fetchRealJobs(searchQuery, filterLocation, 'gb'); // You can make this dynamic if needed
@@ -161,13 +163,17 @@ export default function JobBoard() {
     fetchJobs();
   };
 
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+
   const handlePostJob = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
 
+    setIsProcessingPayment(true);
     try {
       const reqArray = requirements.split('\n').filter(r => r.trim() !== '');
       const skillsArray = skills.split(',').map(s => s.trim()).filter(s => s !== '');
+      
       const docRef = await addDoc(collection(db, 'jobs'), {
         employerId: user.uid,
         title,
@@ -180,10 +186,11 @@ export default function JobBoard() {
         industry,
         salaryRange,
         type,
+        status: 'active',
         createdAt: serverTimestamp()
       });
       
-      // Check for matching alerts
+      // Trigger job alerts
       try {
         const alertsSnapshot = await getDocs(collection(db, 'jobAlerts'));
         alertsSnapshot.forEach(async (alertDoc) => {
@@ -227,8 +234,11 @@ export default function JobBoard() {
       // Show success toast
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
+      setIsProcessingPayment(false);
     } catch (error) {
-      handleFirestoreError(error, OperationType.WRITE, 'jobs');
+      console.error("Failed to post job:", error);
+      alert("Failed to post job. Please try again.");
+      setIsProcessingPayment(false);
     }
   };
 
@@ -411,8 +421,11 @@ export default function JobBoard() {
                   </div>
                 </div>
                 <div className="flex justify-end gap-3 mt-8">
-                  <button type="button" onClick={() => setShowPostForm(false)} className="px-6 py-3 text-slate-500 hover:text-[#062016] font-bold transition-colors">Cancel</button>
-                  <button type="submit" className="bg-[#062016] text-white px-8 py-3 rounded-xl font-bold hover:bg-black transition-all shadow-lg shadow-[#062016]/10">Post Job</button>
+                  <button type="button" onClick={() => setShowPostForm(false)} disabled={isProcessingPayment} className="px-6 py-3 text-slate-500 hover:text-[#062016] font-bold transition-colors disabled:opacity-50">Cancel</button>
+                  <button type="submit" disabled={isProcessingPayment} className="bg-[#062016] text-white px-8 py-3 rounded-xl font-bold hover:bg-black transition-all shadow-lg shadow-[#062016]/10 disabled:opacity-70 flex items-center gap-2">
+                    {isProcessingPayment && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>}
+                    {isProcessingPayment ? 'Posting Job...' : 'Post Job'}
+                  </button>
                 </div>
               </form>
             </div>

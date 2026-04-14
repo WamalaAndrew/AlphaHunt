@@ -15,6 +15,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const [verificationSent, setVerificationSent] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [isProfilePromptDismissed, setIsProfilePromptDismissed] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -148,12 +149,12 @@ export default function Dashboard() {
           )}
         </div>
       )}
-      {!isProfileComplete && (
-        <div className="bg-[#bef264]/10 border-b border-[#bef264]/20 px-4 py-3 text-[#062016] flex flex-col sm:flex-row items-center justify-center gap-3 text-sm">
+      {!isProfileComplete && !isProfilePromptDismissed && (
+        <div className="bg-[#bef264]/10 border-b border-[#bef264]/20 px-4 py-3 text-[#062016] flex flex-col sm:flex-row items-center justify-center gap-3 text-sm relative">
           <div className="flex items-center gap-2">
-            <Settings className="w-5 h-5 text-[#062016]/60" />
+            <Sparkles className="w-5 h-5 text-[#062016]/60" />
             <span>
-              Complete your profile: <strong>{missingMessages.join(' and ')}</strong> to get better {userProfile?.role === 'seeker' ? 'job' : 'AI'} recommendations.
+              Complete your profile: <strong>{missingMessages.join(' and ')}</strong> to leverage our AI features more effectively!
             </span>
           </div>
           <button 
@@ -161,6 +162,19 @@ export default function Dashboard() {
             className="font-bold underline hover:text-black transition-colors"
           >
             Complete Profile
+          </button>
+          <button 
+            onClick={() => setIsProfilePromptDismissed(true)}
+            className="absolute right-4 p-1 hover:bg-[#062016]/5 rounded-full transition-colors hidden sm:block"
+            title="Dismiss"
+          >
+            <X className="w-4 h-4" />
+          </button>
+          <button 
+            onClick={() => setIsProfilePromptDismissed(true)}
+            className="mt-2 text-xs text-[#062016]/60 underline sm:hidden"
+          >
+            Dismiss
           </button>
         </div>
       )}

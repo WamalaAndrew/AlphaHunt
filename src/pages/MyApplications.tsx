@@ -213,8 +213,15 @@ export default function MyApplications() {
               return (
                 <div key={app.id} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col sm:flex-row sm:items-start justify-between gap-6 hover:shadow-md transition-shadow">
                   <div className="flex-1">
-                    <h3 className="text-lg font-bold text-slate-900">{app.jobTitle || 'Job Application'}</h3>
-                    <p className="text-slate-600 font-medium">{app.companyName || 'Company'}</p>
+                    <h3 className="text-lg font-bold text-slate-900">
+                      {userProfile?.role === 'employer' ? (app.seekerName || 'Applicant') : (app.jobTitle || 'Job Application')}
+                    </h3>
+                    <p className="text-slate-600 font-medium">
+                      {userProfile?.role === 'employer' ? `Applied for: ${app.jobTitle}` : (app.companyName || 'Company')}
+                    </p>
+                    {userProfile?.role === 'employer' && app.seekerEmail && (
+                      <p className="text-sm text-slate-500 mt-1">{app.seekerEmail}</p>
+                    )}
                     <p className="text-xs text-slate-400 mt-1.5 mb-4 uppercase tracking-wider font-medium">
                       Applied on {app.createdAt?.toDate ? app.createdAt.toDate().toLocaleDateString() : 'Recently'}
                     </p>
@@ -282,7 +289,7 @@ export default function MyApplications() {
                           <option value="rejected">Rejected</option>
                         </select>
                         <button
-                          onClick={() => navigate(`/messages?userId=${app.seekerId}&name=Candidate&role=seeker`)}
+                          onClick={() => navigate(`/messages?userId=${app.seekerId}&name=${encodeURIComponent(app.seekerName || 'Candidate')}&role=seeker`)}
                           className="w-full sm:w-auto flex items-center justify-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-4 py-2 rounded-xl transition-colors"
                         >
                           <MessageSquare className="w-4 h-4" /> Message

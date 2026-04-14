@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { db } from '../firebase';
+import { db, storage } from '../firebase';
 import { collection, getDocs, addDoc, serverTimestamp, query, orderBy, updateDoc, doc, arrayUnion, arrayRemove, increment } from 'firebase/firestore';
-import { MessageSquare, Heart, Share2, Send, Image as ImageIcon, MoreHorizontal } from 'lucide-react';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { MessageSquare, Heart, Share2, Send, Image as ImageIcon, MoreHorizontal, X } from 'lucide-react';
 import { handleFirestoreError, OperationType } from '../contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 
@@ -13,6 +14,7 @@ interface Post {
   authorPhoto: string;
   authorRole: string;
   content: string;
+  imageUrl?: string;
   likes: string[];
   commentsCount: number;
   createdAt: any;
@@ -27,6 +29,11 @@ export default function Feed() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [commentSubmitting, setCommentSubmitting] = useState(false);
+  
+  // Image upload state
+  const [imageUrl, setImageUrl] = useState('');
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchPosts();
@@ -45,6 +52,25 @@ export default function Feed() {
       handleFirestoreError(error, OperationType.GET, 'posts');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    setUploadingImage(true);
+    try {
+      const storageRef = ref(storage, `posts/${user.uid}_${Date.now()}_${file.name}`);
+      await uploadBytes(storageRef, file);
+      const downloadUrl = await getDownloadURL(storageRef);
+      setImageUrl(downloadUrl);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Failed to upload image. Please try again.");
+    } finally {
+      setUploadingImage(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
@@ -74,7 +100,7 @@ export default function Feed() {
 
   const handleCreatePost = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !newPostContent.trim()) return;
+    if (!user || (!newPostContent.trim() && !imageUrl)) return;
 
     setSubmitting(true);
     try {
@@ -84,11 +110,13 @@ export default function Feed() {
         authorPhoto: user.photoURL || '',
         authorRole: userProfile?.role || 'seeker',
         content: newPostContent,
+        imageUrl: imageUrl || null,
         likes: [],
         commentsCount: 0,
         createdAt: serverTimestamp()
       });
       setNewPostContent('');
+      setImageUrl('');
       fetchPosts();
     } catch (error) {
       handleFirestoreError(error, OperationType.WRITE, 'posts');
@@ -145,13 +173,41 @@ export default function Feed() {
               className="w-full border border-[#062016]/10 rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#bef264] focus:border-transparent resize-none min-h-[100px] text-[#062016] placeholder-slate-400 font-medium"
               aria-label="Create a new post"
             />
+            {imageUrl && (
+              <div className="relative mt-3 inline-block">
+                <img src={imageUrl} alt="Upload preview" className="max-h-48 rounded-xl border border-[#062016]/10" />
+                <button 
+                  type="button"
+                  onClick={() => setImageUrl('')}
+                  className="absolute -top-2 -right-2 bg-white text-rose-500 rounded-full p-1 shadow-md border border-slate-100 hover:bg-rose-50 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
             <div className="flex justify-between items-center mt-3">
-              <button type="button" className="text-slate-400 hover:text-[#062016] p-2 rounded-full hover:bg-[#062016]/5 transition-colors">
-                <ImageIcon className="w-5 h-5" />
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                onChange={handleImageUpload} 
+                accept="image/*" 
+                className="hidden" 
+              />
+              <button 
+                type="button" 
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingImage}
+                className="text-slate-400 hover:text-[#062016] p-2 rounded-full hover:bg-[#062016]/5 transition-colors disabled:opacity-50"
+              >
+                {uploadingImage ? (
+                  <div className="w-5 h-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  <ImageIcon className="w-5 h-5" />
+                )}
               </button>
               <button
                 type="submit"
-                disabled={submitting || !newPostContent.trim()}
+                disabled={submitting || (!newPostContent.trim() && !imageUrl) || uploadingImage}
                 className="bg-[#062016] text-white px-6 py-2 rounded-xl font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 hover:bg-black shadow-lg shadow-[#062016]/10"
               >
                 {submitting ? 'Posting...' : <><Send className="w-4 h-4" /> Post</>}
@@ -198,7 +254,15 @@ export default function Feed() {
                 </button>
               </div>
               
-              <p className="text-[#062016] mb-6 whitespace-pre-wrap leading-relaxed text-base font-medium">{post.content}</p>
+              {post.content && (
+                <p className="text-[#062016] mb-4 whitespace-pre-wrap leading-relaxed text-base font-medium">{post.content}</p>
+              )}
+              
+              {post.imageUrl && (
+                <div className="mb-6 rounded-2xl overflow-hidden border border-[#062016]/5">
+                  <img src={post.imageUrl} alt="Post attachment" className="w-full h-auto max-h-[500px] object-cover" />
+                </div>
+              )}
               
               <div className="flex items-center gap-6 pt-4 border-t border-[#062016]/5">
                 <button 

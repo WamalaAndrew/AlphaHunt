@@ -206,23 +206,12 @@ export default function JobDetails() {
       const storageRef = ref(storage, `cvs/${user.uid}_${Date.now()}_${file.name}`);
       await uploadBytes(storageRef, file);
       const downloadUrl = await getDownloadURL(storageRef);
-
-      await addDoc(collection(db, 'applications'), {
-        jobId: job.id,
-        seekerId: user.uid,
-        employerId: job.employerId,
-        jobTitle: job.title,
-        companyName: job.company,
-        status: 'pending',
-        cvUrl: downloadUrl,
-        coverLetter: null,
-        createdAt: serverTimestamp()
-      });
-
-      setHasApplied(true);
-      alert("CV uploaded and application submitted successfully!");
+      
+      setCvUrl(downloadUrl);
+      alert("CV uploaded successfully! You can now submit your application.");
     } catch (error) {
-      handleFirestoreError(error, OperationType.WRITE, 'applications');
+      console.error("Error uploading CV:", error);
+      alert("Failed to upload CV. Please try again or provide a link instead.");
     } finally {
       setUploadingCv(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -238,6 +227,8 @@ export default function JobDetails() {
       await addDoc(collection(db, 'applications'), {
         jobId: job.id,
         seekerId: user.uid,
+        seekerName: user.displayName || 'Anonymous Candidate',
+        seekerEmail: user.email || '',
         employerId: job.employerId,
         jobTitle: job.title,
         companyName: job.company,
@@ -349,34 +340,6 @@ export default function JobDetails() {
                         Apply Now
                       </button>
                       
-                      <input 
-                        type="file" 
-                        ref={fileInputRef} 
-                        onChange={handleCvUpload} 
-                        accept=".pdf,.doc,.docx" 
-                        className="hidden" 
-                      />
-                      <button 
-                        onClick={() => fileInputRef.current?.click()}
-                        disabled={uploadingCv}
-                        className="bg-white hover:bg-slate-50 text-[#062016] border border-[#062016]/10 px-6 py-4 rounded-2xl font-bold transition-all shadow-sm flex items-center justify-center gap-2 disabled:opacity-70"
-                      >
-                        {uploadingCv ? (
-                          <div className="w-5 h-5 border-2 border-[#062016] border-t-transparent rounded-full animate-spin"></div>
-                        ) : (
-                          <Upload className="w-5 h-5" />
-                        )}
-                        {uploadingCv ? 'Uploading...' : 'Upload CV'}
-                      </button>
-
-                      <button 
-                        onClick={() => navigate(`/chat?feature=cover-letter&jobId=${job.id}`)}
-                        className="bg-[#bef264] text-[#062016] px-6 py-4 rounded-2xl font-bold transition-all shadow-lg shadow-[#bef264]/20 hover:bg-[#a3e635] flex items-center justify-center gap-2"
-                      >
-                        <Sparkles className="w-5 h-5" />
-                        AI Cover Letter
-                      </button>
-                      
                       <button 
                         onClick={() => navigate(`/messages?userId=${job.employerId}&name=${encodeURIComponent(job.company)}&role=employer`)}
                         className="bg-white hover:bg-slate-50 text-[#062016] border border-[#062016]/10 px-6 py-4 rounded-2xl font-bold transition-all shadow-sm flex items-center justify-center gap-2"
@@ -467,15 +430,37 @@ export default function JobDetails() {
             
             <form onSubmit={handleApplySubmit} className="p-8 space-y-6">
               <div className="space-y-1.5">
-                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">CV / Resume Link (Optional)</label>
-                <p className="text-xs text-slate-500 mb-2">Provide a link to your Google Drive, Dropbox, or LinkedIn profile.</p>
-                <input 
-                  type="url" 
-                  value={cvUrl} 
-                  onChange={(e) => setCvUrl(e.target.value)}
-                  placeholder="https://..."
-                  className="w-full border border-[#062016]/10 rounded-xl p-3.5 focus:ring-2 focus:ring-[#bef264] outline-none font-medium"
-                />
+                <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">CV / Resume</label>
+                <p className="text-xs text-slate-500 mb-2">Provide a link or upload your CV directly.</p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <input 
+                    type="url" 
+                    value={cvUrl} 
+                    onChange={(e) => setCvUrl(e.target.value)}
+                    placeholder="https://..."
+                    className="flex-1 border border-[#062016]/10 rounded-xl p-3.5 focus:ring-2 focus:ring-[#bef264] outline-none font-medium"
+                  />
+                  <input 
+                    type="file" 
+                    ref={fileInputRef} 
+                    onChange={handleCvUpload} 
+                    accept=".pdf,.doc,.docx" 
+                    className="hidden" 
+                  />
+                  <button 
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadingCv}
+                    className="bg-[#062016]/5 hover:bg-[#062016]/10 text-[#062016] px-6 py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2 disabled:opacity-70 whitespace-nowrap"
+                  >
+                    {uploadingCv ? (
+                      <div className="w-5 h-5 border-2 border-[#062016] border-t-transparent rounded-full animate-spin"></div>
+                    ) : (
+                      <Upload className="w-5 h-5" />
+                    )}
+                    {uploadingCv ? 'Uploading...' : 'Upload File'}
+                  </button>
+                </div>
               </div>
               
               <div className="space-y-1.5">
@@ -565,6 +550,15 @@ export default function JobDetails() {
                       </div>
                       <div className="bg-[#062016]/5 rounded-xl p-4 mt-4 text-sm text-slate-700 font-medium leading-relaxed border border-[#062016]/5">
                         <strong className="text-[#062016] block mb-1">AI Analysis:</strong> {candidate.matchReason}
+                      </div>
+                      <div className="mt-4 flex justify-end">
+                        <button 
+                          onClick={() => navigate(`/messages?userId=${candidate.id}&name=${encodeURIComponent(candidate.displayName || 'Candidate')}&role=seeker`)}
+                          className="bg-white hover:bg-[#062016]/5 text-[#062016] border border-[#062016]/10 px-4 py-2 rounded-xl font-bold transition-all shadow-sm flex items-center justify-center gap-2 text-sm"
+                        >
+                          <MessageSquare className="w-4 h-4" />
+                          Message Candidate
+                        </button>
                       </div>
                     </div>
                   ))}
