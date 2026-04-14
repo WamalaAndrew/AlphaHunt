@@ -12,32 +12,46 @@ export interface Job {
   url: string;
 }
 
+// Determine the base URL for API calls
+// In development, it uses relative paths (proxied by Vite)
+// In production (Vercel), it uses relative paths which are handled by vercel.json rewrites
+const API_BASE = '';
+
 export const fetchRealJobs = async (query: string, location: string, country: string = 'gb'): Promise<Job[]> => {
   try {
     // 1. Fetch from Adzuna (Global/UK)
-    const adzunaPromise = axios.get('/api/jobs', {
+    const adzunaPromise = axios.get(`${API_BASE}/api/jobs`, {
       params: {
         query: query || 'software',
         location: location || 'london',
         country: country,
       },
-    }).catch(() => ({ data: { results: [] } }));
+    }).catch((e) => {
+      console.error("Adzuna fetch failed:", e);
+      return { data: { results: [] } };
+    });
 
     // 2. Fetch from Google Jobs via SerpApi (Great for Africa, BrighterMonday, etc.)
-    const googlePromise = axios.get('/api/jobs/google', {
+    const googlePromise = axios.get(`${API_BASE}/api/jobs/google`, {
       params: {
         query: query || 'software',
         location: location || 'Uganda',
       },
-    }).catch(() => ({ data: { jobs_results: [] } }));
+    }).catch((e) => {
+      console.error("Google Jobs fetch failed:", e);
+      return { data: { jobs_results: [] } };
+    });
 
     // 3. Fetch from JSearch via RapidAPI (Excellent for Uganda/East Africa)
-    const jsearchPromise = axios.get('/api/jobs/jsearch', {
+    const jsearchPromise = axios.get(`${API_BASE}/api/jobs/jsearch`, {
       params: {
         query: query || 'software',
         location: location || 'Uganda',
       },
-    }).catch(() => ({ data: { data: [] } }));
+    }).catch((e) => {
+      console.error("JSearch fetch failed:", e);
+      return { data: { data: [] } };
+    });
 
     // Wait for all APIs to return
     const [adzunaRes, googleRes, jsearchRes] = await Promise.all([adzunaPromise, googlePromise, jsearchPromise]);
