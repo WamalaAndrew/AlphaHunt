@@ -1,6 +1,5 @@
 import "dotenv/config";
 import express from "express";
-import { createServer as createViteServer } from "vite";
 import path from "path";
 import axios from "axios";
 
@@ -172,6 +171,8 @@ if (process.env.VERCEL !== "1") {
   async function startServer() {
     // Vite middleware for development
     if (process.env.NODE_ENV !== "production") {
+      // Dynamic import to prevent Vercel from trying to bundle Vite
+      const { createServer: createViteServer } = await import("vite");
       const vite = await createViteServer({
         server: { middlewareMode: true },
         appType: "spa",
