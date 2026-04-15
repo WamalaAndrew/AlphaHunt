@@ -105,7 +105,7 @@ export default function Feed() {
       await addDoc(collection(db, 'posts'), {
         authorId: user.uid,
         authorName: user.displayName || 'Anonymous',
-        authorPhoto: user.photoURL || '',
+        authorPhoto: userProfile?.photoURL || user.photoURL || '',
         authorRole: userProfile?.role || 'seeker',
         content: newPostContent,
         imageUrl: imageUrl || null,
@@ -156,8 +156,8 @@ export default function Feed() {
       {/* Create Post */}
       <div className="bg-white p-5 rounded-[2rem] shadow-sm border border-[#062016]/5">
         <div className="flex gap-4">
-          {user?.photoURL ? (
-            <img src={user.photoURL} alt="Profile" className="w-12 h-12 rounded-full object-cover border border-[#062016]/10" referrerPolicy="no-referrer" />
+          {userProfile?.photoURL || user?.photoURL ? (
+            <img src={userProfile?.photoURL || user.photoURL} alt="Profile" className="w-12 h-12 rounded-full object-cover border border-[#062016]/10" referrerPolicy="no-referrer" />
           ) : (
             <div className="w-12 h-12 rounded-full bg-[#062016] flex items-center justify-center text-[#bef264] font-bold text-lg">
               {user?.displayName?.charAt(0) || 'U'}

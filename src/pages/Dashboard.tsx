@@ -221,8 +221,8 @@ export default function Dashboard() {
                 {/* Profile Section */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-4">
-                    {user?.photoURL ? (
-                      <img src={user.photoURL} alt="Profile" className="w-12 h-12 rounded-full border-2 border-[#062016]/10" referrerPolicy="no-referrer" />
+                    {userProfile?.photoURL || user?.photoURL ? (
+                      <img src={userProfile?.photoURL || user.photoURL} alt="Profile" className="w-12 h-12 rounded-full border-2 border-[#062016]/10" referrerPolicy="no-referrer" />
                     ) : (
                       <div className="w-12 h-12 rounded-full bg-[#062016] text-[#bef264] flex items-center justify-center font-bold text-xl">
                         {user?.displayName?.charAt(0) || 'U'}
@@ -317,8 +317,8 @@ export default function Dashboard() {
             </span>
           </button>
           <div className="hidden md:flex items-center gap-2">
-            {user?.photoURL ? (
-              <img src={user.photoURL} alt="Profile" className="w-8 h-8 rounded-full border border-white/20" referrerPolicy="no-referrer" />
+            {userProfile?.photoURL || user?.photoURL ? (
+              <img src={userProfile?.photoURL || user.photoURL} alt="Profile" className="w-8 h-8 rounded-full border border-white/20" referrerPolicy="no-referrer" />
             ) : (
               <div className="w-8 h-8 rounded-full bg-[#bef264] text-[#062016] flex items-center justify-center font-bold text-xs">
                 {user?.displayName?.charAt(0) || user?.email?.charAt(0) || 'U'}
@@ -349,8 +349,8 @@ export default function Dashboard() {
               </div>
               <div className="px-6 pb-6 relative">
                 <div className="absolute -top-10 left-6">
-                  {user?.photoURL ? (
-                    <img src={user.photoURL} alt="Profile" className="w-20 h-20 rounded-full border-4 border-white object-cover bg-white shadow-md" referrerPolicy="no-referrer" />
+                  {userProfile?.photoURL || user?.photoURL ? (
+                    <img src={userProfile?.photoURL || user.photoURL} alt="Profile" className="w-20 h-20 rounded-full border-4 border-white object-cover bg-white shadow-md" referrerPolicy="no-referrer" />
                   ) : (
                     <div className="w-20 h-20 rounded-full border-4 border-white bg-[#bef264] flex items-center justify-center text-[#062016] font-bold text-2xl shadow-md">
                       {user?.displayName?.charAt(0) || user?.email?.charAt(0) || 'U'}

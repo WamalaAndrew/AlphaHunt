@@ -173,8 +173,8 @@ export default function FindCoach() {
             {coaches.map(coach => (
               <div key={coach.uid} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col h-full hover:shadow-md transition-shadow">
                 <div className="flex items-start gap-4 mb-5">
-                  {coach.photoURL ? (
-                    <img src={coach.photoURL} alt={coach.displayName} className="w-16 h-16 rounded-full border border-slate-200 object-cover" referrerPolicy="no-referrer" />
+                  {coach.photoURL || coach.userPhotoURL ? (
+                    <img src={coach.photoURL || coach.userPhotoURL} alt={coach.displayName} className="w-16 h-16 rounded-full border border-slate-200 object-cover" referrerPolicy="no-referrer" />
                   ) : (
                     <div className="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center text-white font-bold text-xl">
                       {coach.displayName?.charAt(0) || 'C'}

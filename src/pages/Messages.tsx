@@ -64,7 +64,8 @@ export default function Messages() {
               participantDetails: {
                 [user.uid]: {
                   name: userProfile?.displayName || user.email?.split('@')[0] || 'User',
-                  role: userProfile?.role || 'user'
+                  role: userProfile?.role || 'user',
+                  photoUrl: userProfile?.photoURL || user.photoURL || ''
                 },
                 [newChatUserId]: {
                   name: newChatUserName,
