@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { db, storage } from '../firebase';
+import { db } from '../firebase';
 import { doc, getDoc, collection, addDoc, query, where, getDocs, serverTimestamp } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { uploadToCloudinary } from '../services/uploadService';
 import { ArrowLeft, Building, MapPin, DollarSign, Briefcase, Clock, CheckCircle, Upload, Sparkles, MessageSquare, Plus } from 'lucide-react';
 import { AlphaLogo } from '../components/AlphaLogo';
 import { handleFirestoreError, OperationType } from '../contexts/AuthContext';
@@ -203,15 +203,13 @@ export default function JobDetails() {
 
     setUploadingCv(true);
     try {
-      const storageRef = ref(storage, `cvs/${user.uid}_${Date.now()}_${file.name}`);
-      await uploadBytes(storageRef, file);
-      const downloadUrl = await getDownloadURL(storageRef);
+      const downloadUrl = await uploadToCloudinary(file);
       
       setCvUrl(downloadUrl);
       alert("CV uploaded successfully! You can now submit your application.");
     } catch (error) {
       console.error("Error uploading CV:", error);
-      alert("Failed to upload CV. Please try again or provide a link instead.");
+      alert("Failed to upload CV. Please check your Cloudinary configuration.");
     } finally {
       setUploadingCv(false);
       if (fileInputRef.current) fileInputRef.current.value = '';

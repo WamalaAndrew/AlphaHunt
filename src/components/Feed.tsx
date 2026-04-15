@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { db, storage } from '../firebase';
+import { db } from '../firebase';
 import { collection, getDocs, addDoc, serverTimestamp, query, orderBy, updateDoc, doc, arrayUnion, arrayRemove, increment } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { uploadToCloudinary } from '../services/uploadService';
 import { MessageSquare, Heart, Share2, Send, Image as ImageIcon, MoreHorizontal, X } from 'lucide-react';
 import { handleFirestoreError, OperationType } from '../contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -61,13 +61,11 @@ export default function Feed() {
 
     setUploadingImage(true);
     try {
-      const storageRef = ref(storage, `posts/${user.uid}_${Date.now()}_${file.name}`);
-      await uploadBytes(storageRef, file);
-      const downloadUrl = await getDownloadURL(storageRef);
+      const downloadUrl = await uploadToCloudinary(file);
       setImageUrl(downloadUrl);
     } catch (error) {
       console.error("Error uploading image:", error);
-      alert("Failed to upload image. Please try again.");
+      alert("Failed to upload image. Please check your Cloudinary configuration.");
     } finally {
       setUploadingImage(false);
       if (fileInputRef.current) fileInputRef.current.value = '';

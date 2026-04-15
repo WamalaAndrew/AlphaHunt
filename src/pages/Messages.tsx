@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { db, storage } from '../firebase';
+import { db } from '../firebase';
 import { collection, query, where, getDocs, addDoc, serverTimestamp, orderBy, onSnapshot, doc, updateDoc, getDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { uploadToCloudinary } from '../services/uploadService';
 import { Send, ArrowLeft, Search, User, Clock, Image as ImageIcon, Video, X } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { handleFirestoreError, OperationType } from '../contexts/AuthContext';
@@ -155,13 +155,11 @@ export default function Messages() {
 
     setUploadingImage(true);
     try {
-      const storageRef = ref(storage, `chats/${activeChat.id}/${user.uid}_${Date.now()}_${file.name}`);
-      await uploadBytes(storageRef, file);
-      const downloadUrl = await getDownloadURL(storageRef);
+      const downloadUrl = await uploadToCloudinary(file);
       setImageUrl(downloadUrl);
     } catch (error) {
       console.error("Error uploading image:", error);
-      alert("Failed to upload image. Please try again.");
+      alert("Failed to upload image. Please check your Cloudinary configuration.");
     } finally {
       setUploadingImage(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
