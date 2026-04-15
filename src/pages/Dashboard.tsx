@@ -66,6 +66,8 @@ export default function Dashboard() {
       navigate('/cv-builder');
     } else if (featureId === 'messages') {
       navigate('/messages');
+    } else if (featureId === 'settings') {
+      navigate('/settings');
     } else {
       navigate(`/chat?feature=${encodeURIComponent(featureId)}`);
     }
@@ -79,6 +81,7 @@ export default function Dashboard() {
     { id: 'messages', icon: <MessageSquare className="w-5 h-5" />, title: 'Messages', description: 'Chat directly with employers.' },
     { id: 'interview', icon: <Sparkles className="w-5 h-5" />, title: 'AI Career Coach', description: 'Practice interviews and get instant career advice.' },
     { id: 'coaches', icon: <Users className="w-5 h-5" />, title: 'Human Coaches (Beta)', description: 'Book sessions with verified career coaches.' },
+    { id: 'settings', icon: <Settings className="w-5 h-5" />, title: 'Settings', description: 'Update your profile and preferences.' },
   ];
 
   const coachFeatures = [
@@ -87,6 +90,7 @@ export default function Dashboard() {
     { id: 'messages', icon: <MessageSquare className="w-5 h-5" />, title: 'Messages', description: 'Chat with your clients and leads.' },
     { id: 'earnings', icon: <FileText className="w-5 h-5" />, title: 'Earnings & Payouts', description: 'Track your income and request payouts.' },
     { id: 'advice', icon: <MessageSquare className="w-5 h-5" />, title: 'AlphaHunt AI', description: 'Get AI advice on how to grow your coaching business.' },
+    { id: 'settings', icon: <Settings className="w-5 h-5" />, title: 'Settings', description: 'Update your profile and preferences.' },
   ];
 
   const employerFeatures = [
@@ -94,12 +98,14 @@ export default function Dashboard() {
     { id: 'applications', icon: <Users className="w-5 h-5" />, title: 'View Applicants', description: 'Review candidates who applied to your jobs.' },
     { id: 'messages', icon: <MessageSquare className="w-5 h-5" />, title: 'Messages', description: 'Chat directly with candidates.' },
     { id: 'advice', icon: <MessageSquare className="w-5 h-5" />, title: 'AlphaHunt AI', description: 'Get AI help writing job descriptions and interview questions.' },
+    { id: 'settings', icon: <Settings className="w-5 h-5" />, title: 'Settings', description: 'Update your profile and preferences.' },
   ];
 
   const adminFeatures = [
     { id: 'admin', icon: <Users className="w-5 h-5" />, title: 'User Management', description: 'View and manage all registered users on the platform.' },
     { id: 'jobs', icon: <Briefcase className="w-5 h-5" />, title: 'Job Board Overview', description: 'Monitor all job postings across the platform.' },
     { id: 'coaches', icon: <Search className="w-5 h-5" />, title: 'Coach Directory', description: 'Review all registered career coaches.' },
+    { id: 'settings', icon: <Settings className="w-5 h-5" />, title: 'Settings', description: 'Update your profile and preferences.' },
   ];
 
   let features = seekerFeatures;
@@ -229,20 +235,14 @@ export default function Dashboard() {
                   </div>
                   
                   <div className="flex flex-col gap-2">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Switch Role</p>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Your Role</p>
                     <div className="bg-[#062016]/5 rounded-xl p-3 border border-[#062016]/10">
-                      <select 
-                        value={userProfile?.role || 'seeker'} 
-                        onChange={handleRoleChange}
-                        className="w-full bg-transparent text-[#062016] text-sm font-bold focus:outline-none cursor-pointer capitalize"
-                      >
-                        <option value="seeker">Job Seeker</option>
-                        <option value="coach">Career Coach</option>
-                        <option value="employer">Employer</option>
-                        {user?.email === 'wamalaandrew632@gmail.com' && (
-                          <option value="admin">Admin</option>
-                        )}
-                      </select>
+                      <p className="w-full bg-transparent text-[#062016] text-sm font-bold capitalize">
+                        {userProfile?.role === 'seeker' ? 'Job Seeker' : 
+                         userProfile?.role === 'coach' ? 'Career Coach' : 
+                         userProfile?.role === 'employer' ? 'Employer' : 
+                         userProfile?.role === 'admin' ? 'Admin' : 'Job Seeker'}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -303,21 +303,19 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <div className="hidden md:flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-2 py-1">
+          <button 
+            onClick={() => navigate('/settings')}
+            className="hidden md:flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 hover:bg-white/10 transition-colors"
+            title="Profile Settings"
+          >
             <Settings className="w-4 h-4 text-white/40" />
-            <select 
-              value={userProfile?.role || 'seeker'} 
-              onChange={handleRoleChange}
-              className="bg-transparent text-white text-sm font-medium focus:outline-none cursor-pointer capitalize"
-            >
-              <option value="seeker" className="text-slate-900">Job Seeker</option>
-              <option value="coach" className="text-slate-900">Career Coach</option>
-              <option value="employer" className="text-slate-900">Employer</option>
-              {user?.email === 'wamalaandrew632@gmail.com' && (
-                <option value="admin" className="text-slate-900">Admin</option>
-              )}
-            </select>
-          </div>
+            <span className="text-white text-sm font-medium capitalize">
+              {userProfile?.role === 'seeker' ? 'Job Seeker' : 
+               userProfile?.role === 'coach' ? 'Career Coach' : 
+               userProfile?.role === 'employer' ? 'Employer' : 
+               userProfile?.role === 'admin' ? 'Admin' : 'Job Seeker'}
+            </span>
+          </button>
           <div className="hidden md:flex items-center gap-2">
             {user?.photoURL ? (
               <img src={user.photoURL} alt="Profile" className="w-8 h-8 rounded-full border border-white/20" referrerPolicy="no-referrer" />

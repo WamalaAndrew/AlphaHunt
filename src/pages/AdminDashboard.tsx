@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { db } from '../firebase';
-import { collection, getDocs, query, doc, updateDoc } from 'firebase/firestore';
-import { Users, ArrowLeft, Shield, Briefcase, User, GraduationCap, Check, X } from 'lucide-react';
+import { collection, getDocs, query, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { Users, ArrowLeft, Shield, Briefcase, User, GraduationCap, Check, X, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { AlphaLogo } from '../components/AlphaLogo';
 import { NotificationBadge } from '../components/NotificationBadge';
@@ -67,6 +67,18 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error("Error updating role:", error);
       alert("Failed to update user role.");
+    }
+  };
+
+  const handleDeleteUser = async (userId: string, userName: string) => {
+    if (window.confirm(`Are you sure you want to delete the profile for ${userName}? This action cannot be undone.`)) {
+      try {
+        await deleteDoc(doc(db, 'users', userId));
+        setUsers(users.filter(u => u.uid !== userId));
+      } catch (error) {
+        console.error("Error deleting user:", error);
+        alert("Failed to delete user profile.");
+      }
     }
   };
 
@@ -135,7 +147,7 @@ export default function AdminDashboard() {
                   <th className="p-6">Email</th>
                   <th className="p-6">Role</th>
                   <th className="p-6">Joined</th>
-                  <th className="p-6">Last Active</th>
+                  <th className="p-6">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#062016]/5">
@@ -191,8 +203,14 @@ export default function AdminDashboard() {
                     <td className="p-6 text-slate-400 font-bold text-xs uppercase tracking-wider">
                       {u.createdAt?.toDate ? u.createdAt.toDate().toLocaleDateString() : 'Unknown'}
                     </td>
-                    <td className="p-6 text-slate-400 font-bold text-xs uppercase tracking-wider">
-                      {u.updatedAt?.toDate ? u.updatedAt.toDate().toLocaleDateString() : (u.createdAt?.toDate ? u.createdAt.toDate().toLocaleDateString() : 'Unknown')}
+                    <td className="p-6">
+                      <button 
+                        onClick={() => handleDeleteUser(u.uid, u.displayName || u.email)}
+                        className="p-2 text-rose-500 hover:bg-rose-50 rounded-xl transition-colors"
+                        title="Delete User Profile"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
                     </td>
                   </tr>
                 ))}

@@ -283,7 +283,7 @@ export default function Landing() {
         {/* Trust Bar */}
         <section className="py-12 border-b border-slate-100">
           <div className="max-w-7xl mx-auto px-6">
-            <p className="text-center text-slate-400 text-sm font-bold uppercase tracking-widest mb-8">Trusted By 1M+ Business</p>
+            <p className="text-center text-slate-400 text-sm font-bold uppercase tracking-widest mb-8">Trusted by leading companies across East Africa</p>
             <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20 opacity-40 grayscale">
               <div className="flex items-center gap-2 font-bold text-xl"><Zap className="w-6 h-6" /> Luminous</div>
               <div className="flex items-center gap-2 font-bold text-xl"><Globe className="w-6 h-6" /> Lightbox</div>
@@ -299,10 +299,10 @@ export default function Landing() {
           <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-20 items-center">
             <div>
               <h2 className="text-4xl md:text-5xl font-extrabold text-[#062016] mb-6 leading-tight">
-                Get things Done with <br /> Minimal Effort
+                Streamline hiring with <br /> AI precision
               </h2>
               <p className="text-slate-500 mb-10 leading-relaxed font-medium">
-                Depending on the delivery option you selected at checkout, we'll email you a tracking link after your order has been shipped.
+                AlphaHunt's intelligent platform removes the friction from recruiting, connecting top talent with leading companies instantly and accurately.
               </p>
               
               <div className="space-y-8">
@@ -332,7 +332,7 @@ export default function Landing() {
                   referrerPolicy="no-referrer"
                   loading="lazy"
                 />
-                <h3 className="text-2xl font-bold mb-4">Made for professionals <span className="text-[#bef264]">Accelerate your career</span> into a true industry leader.</h3>
+                <h3 className="text-2xl font-bold mb-4">Built for ambitious professionals. <span className="text-[#bef264]">Accelerate your career</span> and become an industry leader.</h3>
                 <button onClick={handleAction} className="bg-[#bef264] text-[#062016] px-6 py-3 rounded-full font-bold text-sm">Upload Resume</button>
               </div>
               <div className="absolute -top-6 -right-6 bg-white p-4 rounded-2xl shadow-xl border border-slate-100">
@@ -363,7 +363,7 @@ export default function Landing() {
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-16">
               <div>
-                <h2 className="text-4xl font-extrabold text-[#062016] mb-4">Featured Job Circulars</h2>
+                <h2 className="text-4xl font-extrabold text-[#062016] mb-4">Featured Opportunities</h2>
                 <div className="flex flex-wrap gap-2">
                   {['Designer', 'Web Developer', 'Software Engineer', 'Doctors', 'Marketing'].map((cat) => (
                     <button 
@@ -396,12 +396,12 @@ export default function Landing() {
             <div className="grid lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2 grid md:grid-cols-2 gap-6">
                 {[
-                  { title: 'Sr. User Interface', company: 'Apple Inc.', location: 'London, UK', salary: '$45k-$55k', logo: 'https://picsum.photos/seed/apple/100/100' },
-                  { title: 'PHP Developer', company: 'Fiverr', location: 'London, UK', salary: '$45k-$55k', logo: 'https://picsum.photos/seed/fiverr/100/100' },
-                  { title: 'Sr. Software Engineer', company: 'Behance', location: 'London, UK', salary: '$45k-$55k', logo: 'https://picsum.photos/seed/behance/100/100' },
-                  { title: 'UX Researcher', company: 'Apple Inc.', location: 'London, UK', salary: '$45k-$55k', logo: 'https://picsum.photos/seed/apple2/100/100' },
-                  { title: 'Project Manager', company: 'Apple Inc.', location: 'London, UK', salary: '$45k-$55k', logo: 'https://picsum.photos/seed/apple3/100/100' },
-                  { title: 'Products Designer', company: 'Behance', location: 'London, UK', salary: '$45k-$55k', logo: 'https://picsum.photos/seed/behance2/100/100' },
+                  { title: 'Senior Product Designer', company: 'Safaricom', location: 'Nairobi, KE', salary: 'KSh 250k - 350k', logo: 'https://picsum.photos/seed/safaricom/100/100' },
+                  { title: 'Full Stack Developer', company: 'Andela', location: 'Kigali, RW', salary: '$3k - $5k', logo: 'https://picsum.photos/seed/andela/100/100' },
+                  { title: 'Marketing Director', company: 'MTN Group', location: 'Kampala, UG', salary: 'UGX 5M - 8M', logo: 'https://picsum.photos/seed/mtn/100/100' },
+                  { title: 'UX Researcher', company: 'Flutterwave', location: 'Remote', salary: '$4k - $6k', logo: 'https://picsum.photos/seed/flutterwave/100/100' },
+                  { title: 'Product Manager', company: 'SafeBoda', location: 'Kampala, UG', salary: 'UGX 4M - 6M', logo: 'https://picsum.photos/seed/safeboda/100/100' },
+                  { title: 'Data Scientist', company: 'M-KOPA', location: 'Nairobi, KE', salary: 'KSh 300k - 400k', logo: 'https://picsum.photos/seed/mkopa/100/100' },
                 ].map((job, i) => (
                   <div key={i} className="card p-6 flex flex-col justify-between group">
                     <div>
@@ -432,13 +432,13 @@ export default function Landing() {
                 </div>
                 
                 <div className="card p-8">
-                  <h3 className="text-lg font-bold text-[#062016] mb-6">Featured Company</h3>
+                  <h3 className="text-lg font-bold text-[#062016] mb-6">Featured Companies</h3>
                   <div className="space-y-6">
                     {[
-                      { name: 'Behance', loc: 'London, UK', logo: 'https://picsum.photos/seed/b1/40/40' },
-                      { name: 'Microsoft', loc: 'USA', logo: 'https://picsum.photos/seed/m1/40/40' },
-                      { name: 'Fiverr', loc: 'London, UK', logo: 'https://picsum.photos/seed/f1/40/40' },
-                      { name: 'Intel', loc: 'London, UK', logo: 'https://picsum.photos/seed/i1/40/40' },
+                      { name: 'Safaricom', loc: 'Nairobi, KE', logo: 'https://picsum.photos/seed/safaricom/40/40' },
+                      { name: 'MTN Group', loc: 'Kampala, UG', logo: 'https://picsum.photos/seed/mtn/40/40' },
+                      { name: 'Flutterwave', loc: 'Lagos, NG', logo: 'https://picsum.photos/seed/flutterwave/40/40' },
+                      { name: 'Andela', loc: 'Kigali, RW', logo: 'https://picsum.photos/seed/andela/40/40' },
                     ].map((comp, i) => (
                       <div key={i} className="flex items-center gap-4">
                         <img src={comp.logo} alt={comp.name} className="w-10 h-10 rounded-full object-cover" referrerPolicy="no-referrer" loading="lazy" />
@@ -464,9 +464,9 @@ export default function Landing() {
           <div className="max-w-7xl mx-auto">
             <div className="flex justify-between items-end mb-16">
               <h2 className="text-4xl font-extrabold text-[#062016] leading-tight">
-                Creative Profiles Make your <br /> Profile & get Eyeballs 👀
+                Stand out to top <br /> employers instantly
               </h2>
-              <button onClick={handleAction} className="bg-[#062016] text-white px-6 py-3 rounded-full font-bold text-sm">Browse the Team</button>
+              <button onClick={handleAction} className="bg-[#062016] text-white px-6 py-3 rounded-full font-bold text-sm">Browse Candidates</button>
             </div>
             
             <div className="flex gap-6 overflow-x-auto pb-8 no-scrollbar">
@@ -498,17 +498,17 @@ export default function Landing() {
         {/* Testimonials Section */}
         <section className="py-32 px-6 bg-[#fefce8]">
           <div className="max-w-7xl mx-auto text-center">
-            <h2 className="text-4xl font-extrabold text-[#062016] mb-4">Why teams love AlphaHunt's <br /> Hiring Software</h2>
-            <p className="text-slate-500 font-medium mb-16">AlphaHunt's Customers share a passion for nurturing company culture. We all agree hiring can <br /> be more meaningful and personal.</p>
+            <h2 className="text-4xl font-extrabold text-[#062016] mb-4">Why professionals love <br /> AlphaHunt</h2>
+            <p className="text-slate-500 font-medium mb-16">Join thousands of job seekers and employers who have transformed <br /> their careers and businesses with our AI platform.</p>
             
-            <button onClick={handleAction} className="bg-[#bef264] text-[#062016] px-8 py-3 rounded-full font-bold text-sm mb-20">About Our Customers</button>
+            <button onClick={handleAction} className="bg-[#bef264] text-[#062016] px-8 py-3 rounded-full font-bold text-sm mb-20">Read Success Stories</button>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { name: 'Aminul Islam', role: 'Co-Founder, GC Innovation Hub', text: 'The career page we\'ve built in AlphaHunt gives candidates a great first impression of the company.' },
-                { name: 'Saiful Talukdar', role: 'Co-Founder, GC Innovation Hub', text: 'It\'s really easy to use. It makes us look professional and I love the way you can customize your job posts.' },
-                { name: 'Aminul Islam', role: 'Co-Founder, GC Innovation Hub', text: 'The career page we\'ve built in AlphaHunt gives candidates a great first impression of the company.' },
-                { name: 'Saiful Talukdar', role: 'Co-Founder, GC Innovation Hub', text: 'It\'s really easy to use. It makes us look professional and I love the way you can customize your job posts.' },
+                { name: 'Sarah N.', role: 'HR Director, TechCorp', text: 'AlphaHunt reduced our time-to-hire by 40%. The AI matching is incredibly accurate.' },
+                { name: 'David K.', role: 'Senior Developer', text: 'I found my dream job within a week of creating my profile. The career coach feature was a game-changer.' },
+                { name: 'Grace M.', role: 'Startup Founder', text: 'As a growing startup, finding the right talent quickly is crucial. AlphaHunt delivered beyond our expectations.' },
+                { name: 'James O.', role: 'Marketing Manager', text: 'The platform is intuitive, and the quality of opportunities is unmatched in the region.' },
               ].map((t, i) => (
                 <div key={i} className="bg-white rounded-3xl p-8 text-left shadow-sm border border-slate-100">
                   <p className="text-slate-600 text-sm leading-relaxed mb-8 italic">"{t.text}"</p>
@@ -541,9 +541,9 @@ export default function Landing() {
             
             <div className="grid md:grid-cols-3 gap-8">
               {[
-                { title: 'CVs What\'s best for your Recruitment', date: 'June 29, 2024', time: '6 min read', img: 'https://picsum.photos/seed/b1/600/400' },
-                { title: 'Maximizing Your Rental Property\'s Potential', date: 'June 29, 2024', time: '6 min read', img: 'https://picsum.photos/seed/b2/600/400' },
-                { title: 'CVs What\'s best for your Recruitment', date: 'June 29, 2024', time: '6 min read', img: 'https://picsum.photos/seed/b3/600/400' },
+                { title: 'How AI is Transforming Recruitment in East Africa', date: 'Oct 12, 2024', time: '5 min read', img: 'https://picsum.photos/seed/tech1/600/400' },
+                { title: '5 Skills Top Employers are Looking for in 2025', date: 'Oct 08, 2024', time: '7 min read', img: 'https://picsum.photos/seed/tech2/600/400' },
+                { title: 'Mastering the Remote Interview: A Complete Guide', date: 'Sep 28, 2024', time: '6 min read', img: 'https://picsum.photos/seed/tech3/600/400' },
               ].map((blog, i) => (
                 <div key={i} className="group cursor-pointer" onClick={handleAction}>
                   <div className="rounded-[2.5rem] overflow-hidden mb-6 aspect-[4/3]">
@@ -586,10 +586,10 @@ export default function Landing() {
             </div>
             
             <div>
-              <span className="bg-white/10 text-white px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6 inline-block border border-white/20">Career</span>
-              <h2 className="text-4xl font-extrabold text-white mb-6 leading-tight">Join to Help Businesses <br /> for Growth</h2>
-              <p className="text-slate-300 font-medium mb-10 leading-relaxed">Post your job today and quickly connect with top talent. Our user-friendly platform streamlines hiring.</p>
-              <button onClick={handleAction} className="bg-[#bef264] text-[#062016] px-8 py-3 rounded-full font-bold text-sm shadow-lg hover:bg-[#a3e635] transition-colors">Explore Careers</button>
+              <span className="bg-white/10 text-white px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6 inline-block border border-white/20">Workflow</span>
+              <h2 className="text-4xl font-extrabold text-white mb-6 leading-tight">Seamlessly integrates <br /> with your tools</h2>
+              <p className="text-slate-300 font-medium mb-10 leading-relaxed">Connect AlphaHunt with the apps your team already uses. From communication to project management, we've got you covered.</p>
+              <button onClick={handleAction} className="bg-[#bef264] text-[#062016] px-8 py-3 rounded-full font-bold text-sm shadow-lg hover:bg-[#a3e635] transition-colors">View Integrations</button>
             </div>
           </div>
         </section>
@@ -598,8 +598,8 @@ export default function Landing() {
         <section id="faq" className="py-32 px-6 bg-slate-50">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-extrabold text-[#062016] mb-4">Frequently Asked Question</h2>
-              <p className="text-slate-500 font-medium">Onboard your own talent pool to AlphaHunt, invite them to projects, sign contracts and kick off the projects simpler than ever.</p>
+              <h2 className="text-4xl font-extrabold text-[#062016] mb-4">Frequently Asked Questions</h2>
+              <p className="text-slate-500 font-medium">Everything you need to know about the platform. Can't find the answer you're looking for? Feel free to contact our support team.</p>
             </div>
             
             <div className="space-y-4">
@@ -710,7 +710,7 @@ export default function Landing() {
                   <Globe className="w-8 h-8 text-[#062016]" />
                 </div>
               </div>
-              <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-8 leading-tight">Ready to Organize <br /> your Hiring?</h2>
+              <h2 className="text-4xl md:text-6xl font-extrabold text-white mb-8 leading-tight">Ready to transform <br /> your career?</h2>
               
               <div className="flex flex-wrap justify-center gap-8 mb-12 text-white/60 text-sm font-bold uppercase tracking-widest">
                 <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-[#bef264]" /> Free 15-day trial</span>
@@ -748,7 +748,7 @@ export default function Landing() {
                 <span className="text-2xl font-extrabold text-[#062016] tracking-tight">AlphaHunt</span>
               </div>
               <p className="text-slate-500 font-medium leading-relaxed max-w-sm mb-8">
-                Onboard your own talent pool to AlphaHunt, invite them to projects, sign contracts and kick off the projects simpler than ever.
+                The premier AI-powered job board and career platform connecting top talent with leading employers across East Africa.
               </p>
               <div className="flex gap-4">
                 <button className="bg-slate-100 p-3 rounded-full text-[#062016] hover:bg-[#bef264] transition-all"><Facebook className="w-5 h-5" /></button>

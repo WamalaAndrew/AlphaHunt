@@ -22,6 +22,7 @@ import FindCoach from './pages/FindCoach';
 import CoachReviews from './pages/CoachReviews';
 import AdminDashboard from './pages/AdminDashboard';
 import Notifications from './pages/Notifications';
+import Settings from './pages/Settings';
 import { PaymentStatus } from './pages/PaymentStatus';
 
 import { Spinner } from './components/Spinner';
@@ -162,6 +163,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <Notifications />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/settings" 
+            element={
+              <ProtectedRoute>
+                <Settings />
               </ProtectedRoute>
             } 
           />
