@@ -19,6 +19,7 @@ interface CoachProfile {
   testimonials?: string[];
   displayName?: string; // We'll need to fetch this from the users collection
   photoURL?: string;
+  userPhotoURL?: string;
 }
 
 export default function FindCoach() {

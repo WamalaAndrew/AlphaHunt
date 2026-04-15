@@ -19,6 +19,8 @@ interface Application {
   companyName?: string;
   cvUrl?: string;
   coverLetter?: string;
+  seekerName?: string;
+  seekerEmail?: string;
 }
 
 export default function MyApplications() {

@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { db } from '../firebase';
 import { doc, updateDoc } from 'firebase/firestore';
 import { uploadToCloudinary } from '../services/uploadService';
-import { ArrowLeft, Save, Upload, User, Briefcase, Globe, Phone, FileText, Image as ImageIcon } from 'lucide-react';
+import { ArrowLeft, Save, Upload, User, Briefcase, Globe, Phone, FileText, Image as ImageIcon, Shield } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { AlphaLogo } from '../components/AlphaLogo';
 
@@ -16,6 +16,7 @@ export default function Settings() {
   const [skills, setSkills] = useState(userProfile?.skills?.join(', ') || '');
   const [nationality, setNationality] = useState(userProfile?.nationality || '');
   const [phoneNumber, setPhoneNumber] = useState(userProfile?.phoneNumber || '');
+  const [role, setRole] = useState(userProfile?.role || 'seeker');
   
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
@@ -41,6 +42,7 @@ export default function Settings() {
         skills: skillsArray,
         nationality,
         phoneNumber,
+        role: user.email === 'wamalaandrew632@gmail.com' ? role : userProfile?.role, // Only allow role update if it's the admin email
         updatedAt: new Date()
       });
       
@@ -211,6 +213,33 @@ export default function Settings() {
                   </div>
                 </div>
               </div>
+
+              {user?.email === 'wamalaandrew632@gmail.com' && (
+                <div className="p-6 bg-purple-50 border border-purple-100 rounded-xl mb-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Shield className="w-5 h-5 text-purple-600" />
+                    <h3 className="font-bold text-purple-900">Admin Override: Change Your Role</h3>
+                  </div>
+                  <p className="text-sm text-purple-700 mb-4">
+                    Because you are the platform owner ({user.email}), you can change your role here to test different views.
+                  </p>
+                  <div className="relative">
+                    <select 
+                      value={role}
+                      onChange={(e) => setRole(e.target.value as any)}
+                      className="w-full pl-4 pr-10 py-3.5 bg-white border border-purple-200 rounded-xl text-purple-900 font-bold focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all appearance-none cursor-pointer"
+                    >
+                      <option value="admin">Admin</option>
+                      <option value="seeker">Job Seeker</option>
+                      <option value="employer">Employer</option>
+                      <option value="coach">Career Coach</option>
+                    </select>
+                    <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+                      <svg className="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div>
                 <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 ml-1">Professional Bio</label>
