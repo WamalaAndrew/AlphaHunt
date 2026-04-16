@@ -1,14 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { db } from '../firebase';
 import { collection, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 import { Bell } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 export function NotificationBadge() {
   const { user } = useAuth();
   const [unreadCount, setUnreadCount] = useState(0);
   const navigate = useNavigate();
+  const initialLoad = useRef(true);
 
   useEffect(() => {
     if (!user) return;
@@ -21,6 +23,19 @@ export function NotificationBadge() {
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       setUnreadCount(snapshot.docs.length);
+      
+      if (!initialLoad.current) {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === 'added') {
+            const data = change.doc.data();
+            toast(data.message || 'You have a new notification!', {
+              icon: '🔔',
+            });
+          }
+        });
+      } else {
+        initialLoad.current = false;
+      }
     });
 
     return () => unsubscribe();

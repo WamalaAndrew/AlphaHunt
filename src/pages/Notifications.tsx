@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { db } from '../firebase';
 import { collection, query, where, onSnapshot, orderBy, doc, updateDoc, writeBatch } from 'firebase/firestore';
-import { Bell, ArrowLeft, CheckCircle, Briefcase, Calendar, MessageSquare } from 'lucide-react';
+import { Bell, ArrowLeft, CheckCircle, Briefcase, Calendar, MessageSquare, Heart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { AlphaLogo } from '../components/AlphaLogo';
 import { handleFirestoreError, OperationType } from '../contexts/AuthContext';
@@ -30,8 +30,7 @@ export default function Notifications() {
 
     const q = query(
       collection(db, 'notifications'),
-      where('userId', '==', user.uid),
-      orderBy('createdAt', 'desc')
+      where('userId', '==', user.uid)
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -39,6 +38,14 @@ export default function Notifications() {
         id: doc.id,
         ...doc.data()
       })) as Notification[];
+      
+      // Sort on the client side to avoid needing a composite index
+      notifsData.sort((a, b) => {
+        const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
+        const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
+        return timeB - timeA; // Descending order
+      });
+      
       setNotifications(notifsData);
       setLoading(false);
     }, (error) => {
@@ -87,6 +94,10 @@ export default function Notifications() {
         return <Calendar className="w-5 h-5 text-emerald-600" />;
       case 'message':
         return <MessageSquare className="w-5 h-5 text-blue-600" />;
+      case 'like':
+        return <Heart className="w-5 h-5 text-rose-600" />;
+      case 'comment':
+        return <MessageSquare className="w-5 h-5 text-amber-600" />;
       default:
         return <Bell className="w-5 h-5 text-slate-600" />;
     }

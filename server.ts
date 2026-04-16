@@ -120,29 +120,25 @@ app.get("/api/jobs", async (req, res) => {
   }
 });
 
-// Google Jobs API via SerpApi (Supports Uganda, BrighterMonday, etc.)
-app.get("/api/jobs/google", async (req, res) => {
+// Jooble API (Excellent for UAE, Africa, and Global)
+app.post("/api/jobs/jooble", async (req, res) => {
   try {
-    const apiKey = process.env.SERPAPI_KEY;
+    const apiKey = process.env.JOOBLE_API_KEY;
     if (!apiKey) {
       // Return empty array if no key is configured so it doesn't break the frontend
-      return res.json({ jobs_results: [] });
+      return res.json({ jobs: [] });
     }
 
-    const { query, location } = req.query;
-    const response = await axios.get('https://serpapi.com/search.json', {
-      params: {
-        engine: 'google_jobs',
-        q: `${query || 'jobs'} in ${location || 'Uganda'}`,
-        hl: 'en',
-        api_key: apiKey,
-      }
+    const { query, location } = req.body;
+    const response = await axios.post(`https://jooble.org/api/${apiKey}`, {
+      keywords: query || 'jobs',
+      location: location || 'Uganda'
     });
 
     res.json(response.data);
   } catch (error: any) {
-    console.error('Error fetching jobs from SerpApi:', error.response?.data || error.message);
-    res.status(500).json({ error: "Failed to fetch jobs from Google Jobs" });
+    console.error('Error fetching jobs from Jooble:', error.response?.data || error.message);
+    res.status(500).json({ error: "Failed to fetch jobs from Jooble" });
   }
 });
 

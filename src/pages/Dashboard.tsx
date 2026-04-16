@@ -1,14 +1,15 @@
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Briefcase, FileText, MessageSquare, Search, LogOut, ChevronRight, Users, Bell, Settings, AlertTriangle, Sparkles, Menu, X } from 'lucide-react';
+import { Briefcase, FileText, MessageSquare, Search, LogOut, ChevronRight, Users, Bell, Settings, AlertTriangle, Sparkles, Menu, X, Home } from 'lucide-react';
 import { AlphaLogo } from '../components/AlphaLogo';
 import { NotificationBadge } from '../components/NotificationBadge';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { sendEmailVerification } from 'firebase/auth';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Feed from '../components/Feed';
 import { motion, AnimatePresence } from 'framer-motion';
+import toast from 'react-hot-toast';
 
 export default function Dashboard() {
   const { user, userProfile, logout } = useAuth();
@@ -16,6 +17,16 @@ export default function Dashboard() {
   const [verificationSent, setVerificationSent] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isProfilePromptDismissed, setIsProfilePromptDismissed] = useState(false);
+
+  useEffect(() => {
+    if (user && userProfile) {
+      const hasSeenWelcome = sessionStorage.getItem(`welcome_${user.uid}`);
+      if (!hasSeenWelcome) {
+        toast.success(`Welcome back, ${user.displayName || userProfile.displayName || 'User'}! 👋`);
+        sessionStorage.setItem(`welcome_${user.uid}`, 'true');
+      }
+    }
+  }, [user, userProfile]);
 
   const handleLogout = async () => {
     try {
@@ -50,7 +61,9 @@ export default function Dashboard() {
   };
 
   const handleFeatureClick = (featureId: string) => {
-    if (featureId === 'jobs') {
+    if (featureId === 'home') {
+      navigate('/');
+    } else if (featureId === 'jobs') {
       navigate('/jobs');
     } else if (featureId === 'saved-jobs') {
       navigate('/saved-jobs');
@@ -74,6 +87,7 @@ export default function Dashboard() {
   };
 
   const seekerFeatures = [
+    { id: 'home', icon: <Home className="w-5 h-5" />, title: 'Home Page', description: 'Return to the main landing page.' },
     { id: 'jobs', icon: <Search className="w-5 h-5" />, title: 'Find Jobs', description: 'Browse and apply for jobs across East Africa.' },
     { id: 'saved-jobs', icon: <Briefcase className="w-5 h-5" />, title: 'Saved Jobs', description: 'View jobs you have saved for later.' },
     { id: 'applications', icon: <Briefcase className="w-5 h-5" />, title: 'My Applications', description: 'Track the status of jobs you have applied for.' },
@@ -85,6 +99,7 @@ export default function Dashboard() {
   ];
 
   const coachFeatures = [
+    { id: 'home', icon: <Home className="w-5 h-5" />, title: 'Home Page', description: 'Return to the main landing page.' },
     { id: 'coach-profile', icon: <Users className="w-5 h-5" />, title: 'Manage Profile', description: 'Update your bio, services, and pricing.' },
     { id: 'bookings', icon: <Briefcase className="w-5 h-5" />, title: 'Manage Bookings', description: 'View and manage your upcoming coaching sessions.' },
     { id: 'messages', icon: <MessageSquare className="w-5 h-5" />, title: 'Messages', description: 'Chat with your clients and leads.' },
@@ -94,6 +109,7 @@ export default function Dashboard() {
   ];
 
   const employerFeatures = [
+    { id: 'home', icon: <Home className="w-5 h-5" />, title: 'Home Page', description: 'Return to the main landing page.' },
     { id: 'jobs', icon: <Briefcase className="w-5 h-5" />, title: 'Employer Dashboard', description: 'Post new jobs and manage existing listings.' },
     { id: 'applications', icon: <Users className="w-5 h-5" />, title: 'View Applicants', description: 'Review candidates who applied to your jobs.' },
     { id: 'messages', icon: <MessageSquare className="w-5 h-5" />, title: 'Messages', description: 'Chat directly with candidates.' },
@@ -102,6 +118,7 @@ export default function Dashboard() {
   ];
 
   const adminFeatures = [
+    { id: 'home', icon: <Home className="w-5 h-5" />, title: 'Home Page', description: 'Return to the main landing page.' },
     { id: 'admin', icon: <Users className="w-5 h-5" />, title: 'User Management', description: 'View and manage all registered users on the platform.' },
     { id: 'jobs', icon: <Briefcase className="w-5 h-5" />, title: 'Job Board Overview', description: 'Monitor all job postings across the platform.' },
     { id: 'coaches', icon: <Search className="w-5 h-5" />, title: 'Coach Directory', description: 'Review all registered career coaches.' },

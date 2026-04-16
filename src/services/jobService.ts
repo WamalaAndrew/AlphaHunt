@@ -10,6 +10,7 @@ export interface Job {
   type: string;
   createdAt: any;
   url: string;
+  isLocal?: boolean;
 }
 
 // Determine the base URL for API calls
@@ -31,15 +32,13 @@ export const fetchRealJobs = async (query: string, location: string, country: st
       return { data: { results: [] } };
     });
 
-    // 2. Fetch from Google Jobs via SerpApi (Great for Africa, BrighterMonday, etc.)
-    const googlePromise = axios.get(`${API_BASE}/api/jobs/google`, {
-      params: {
-        query: query || 'software',
-        location: location || 'Uganda',
-      },
+    // 2. Fetch from Jooble (Excellent for Africa, UAE, etc.)
+    const jooblePromise = axios.post(`${API_BASE}/api/jobs/jooble`, {
+      query: query || 'software',
+      location: location || 'Uganda',
     }).catch((e) => {
-      console.error("Google Jobs fetch failed:", e);
-      return { data: { jobs_results: [] } };
+      console.error("Jooble fetch failed:", e);
+      return { data: { jobs: [] } };
     });
 
     // 3. Fetch from JSearch via RapidAPI (Excellent for Uganda/East Africa)
@@ -54,7 +53,7 @@ export const fetchRealJobs = async (query: string, location: string, country: st
     });
 
     // Wait for all APIs to return
-    const [adzunaRes, googleRes, jsearchRes] = await Promise.all([adzunaPromise, googlePromise, jsearchPromise]);
+    const [adzunaRes, joobleRes, jsearchRes] = await Promise.all([adzunaPromise, jooblePromise, jsearchPromise]);
 
     // Format Adzuna Jobs
     const adzunaJobs = (adzunaRes.data.results || []).map((job: any) => ({
@@ -69,16 +68,17 @@ export const fetchRealJobs = async (query: string, location: string, country: st
       url: job.redirect_url,
     }));
 
-    // Format Google Jobs
-    const googleJobs = (googleRes.data.jobs_results || []).map((job: any) => ({
-      id: `google_${job.job_id}`,
+    // Format Jooble Jobs
+    const joobleJobs = (joobleRes.data.jobs || []).map((job: any) => ({
+      id: `jooble_${job.id}`,
       title: job.title,
-      company: job.company_name,
+      company: job.company,
       location: job.location,
-      description: job.description,
+      description: job.snippet,
+      salaryRange: job.salary || undefined,
       type: 'Full-time',
-      createdAt: new Date(),
-      url: job.share_link || job.related_links?.[0]?.link || '#',
+      createdAt: new Date(job.updated || Date.now()),
+      url: job.link || '#',
     }));
 
     // Format JSearch Jobs
@@ -94,7 +94,7 @@ export const fetchRealJobs = async (query: string, location: string, country: st
     }));
 
     // Combine all arrays
-    return [...jsearchJobs, ...googleJobs, ...adzunaJobs];
+    return [...jsearchJobs, ...joobleJobs, ...adzunaJobs];
   } catch (error) {
     console.error('Error fetching jobs from APIs:', error);
     return [];

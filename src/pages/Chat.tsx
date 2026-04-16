@@ -220,24 +220,23 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-slate-50 font-sans">
+    <div className="flex flex-col h-[100dvh] bg-[#062016]/5 font-sans selection:bg-[#bef264] selection:text-[#062016]">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-slate-200 p-4 flex items-center justify-between z-10 sticky top-0">
+      <header className="bg-[#062016] border-b border-white/10 p-4 flex items-center justify-between z-10 sticky top-0">
         <div className="flex items-center gap-4">
-          <NotificationBadge />
           <button 
             onClick={() => navigate('/dashboard')}
-            className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-600"
+            className="p-2 hover:bg-white/10 rounded-full transition-colors text-white/70"
           >
             <ArrowLeft className="w-6 h-6" />
           </button>
           <div className="flex items-center gap-3">
-            <div className="bg-indigo-100 p-2 rounded-xl hidden sm:block">
-              <AlphaLogo className="w-5 h-5 text-indigo-700" />
+            <div className="bg-[#bef264] p-2 rounded-xl hidden sm:block">
+              <AlphaLogo className="w-5 h-5 text-[#062016]" />
             </div>
             <div>
-              <h1 className="text-lg md:text-xl font-bold text-slate-900 tracking-tight">AlphaHunt AI</h1>
-              <p className="text-xs text-slate-500 hidden sm:block">Your Ugandan Career Coach 🇺🇬</p>
+              <h1 className="text-lg md:text-xl font-bold text-white tracking-tight">AlphaHunt AI</h1>
+              <p className="text-xs text-[#bef264] hidden sm:block font-bold">Your Ugandan Career Coach 🇺🇬</p>
             </div>
           </div>
         </div>
@@ -256,8 +255,8 @@ export default function Chat() {
               <div
                 className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
                   msg.role === 'user'
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-indigo-100 text-indigo-700'
+                    ? 'bg-[#062016] text-[#bef264]'
+                    : 'bg-[#bef264] text-[#062016]'
                 }`}
               >
                 {msg.role === 'user' ? <User size={20} /> : <Bot size={20} />}
@@ -265,14 +264,14 @@ export default function Chat() {
               <div
                 className={`max-w-[85%] md:max-w-[75%] rounded-2xl p-4 shadow-sm ${
                   msg.role === 'user'
-                    ? 'bg-indigo-600 text-white rounded-tr-none'
-                    : 'bg-white text-slate-800 border border-slate-200 rounded-tl-none'
+                    ? 'bg-[#062016] text-white rounded-tr-none font-medium'
+                    : 'bg-white text-[#062016] border border-[#062016]/10 rounded-tl-none font-medium'
                 }`}
               >
                 {msg.role === 'user' ? (
                   <p className="whitespace-pre-wrap">{msg.text}</p>
                 ) : (
-                  <div className="prose prose-sm md:prose-base max-w-none prose-p:leading-relaxed prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:underline">
+                  <div className="prose prose-sm md:prose-base max-w-none prose-p:leading-relaxed prose-a:text-[#062016] prose-a:font-bold hover:prose-a:text-[#bef264]">
                     <ReactMarkdown>{msg.text}</ReactMarkdown>
                   </div>
                 )}
@@ -281,13 +280,13 @@ export default function Chat() {
           ))}
           {isLoading && (
             <div className="flex gap-4">
-              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#bef264] text-[#062016] flex items-center justify-center">
                 <Bot size={20} />
               </div>
-              <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-none p-4 shadow-sm flex items-center gap-2">
-                <div className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                <div className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                <div className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+              <div className="bg-white border border-[#062016]/10 rounded-2xl rounded-tl-none p-4 shadow-sm flex items-center gap-2">
+                <div className="w-2 h-2 bg-[#062016]/40 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                <div className="w-2 h-2 bg-[#062016]/40 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                <div className="w-2 h-2 bg-[#062016]/40 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
               </div>
             </div>
           )}
@@ -296,7 +295,7 @@ export default function Chat() {
       </main>
 
       {/* Input Area */}
-      <footer className="bg-white border-t border-slate-200 p-4">
+      <footer className="bg-white border-t border-[#062016]/10 p-4 pb-safe">
         <div className="max-w-3xl mx-auto flex gap-2">
           <input
             type="text"
@@ -309,15 +308,15 @@ export default function Chat() {
               }
             }}
             placeholder="Type your message here..."
-            className="flex-1 border border-slate-300 rounded-full px-6 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-slate-50"
+            className="flex-1 border border-[#062016]/10 rounded-full px-6 py-3 focus:outline-none focus:ring-2 focus:ring-[#bef264] focus:border-transparent bg-white font-medium text-[#062016]"
             disabled={isLoading}
           />
           <button
             onClick={handleSend}
             disabled={!input.trim() || isLoading}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full p-3 md:px-6 md:py-3 flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-[#062016] hover:bg-black text-white rounded-full p-3 md:px-6 md:py-3 flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-[#062016]/10"
           >
-            <span className="hidden md:inline font-medium">Send</span>
+            <span className="hidden md:inline font-bold">Send</span>
             <Send size={20} />
           </button>
         </div>

@@ -772,19 +772,19 @@ export default function Landing() {
               <h5 className="font-bold text-[#062016] mb-6">Useful Links</h5>
               <ul className="space-y-4 text-sm font-bold text-slate-500">
                 <li><button onClick={() => scrollToSection('home')} className="hover:text-[#062016]">About</button></li>
-                <li><button onClick={() => scrollToSection('jobs')} className="hover:text-[#062016]">Services</button></li>
-                <li><button onClick={() => scrollToSection('blog')} className="hover:text-[#062016]">Blog</button></li>
+                <li><button onClick={() => scrollToSection('home')} className="hover:text-[#062016]">Workflow</button></li>
+                <li><button onClick={() => scrollToSection('blog')} className="hover:text-[#062016]">Articles & Guides</button></li>
                 <li><button onClick={() => scrollToSection('contact')} className="hover:text-[#062016]">Contact</button></li>
               </ul>
             </div>
             
             <div>
-              <h5 className="font-bold text-[#062016] mb-6">Legal</h5>
+              <h5 className="font-bold text-[#062016] mb-6">Legal & Support</h5>
               <ul className="space-y-4 text-sm font-bold text-slate-500">
                 <li><button onClick={() => scrollToSection('faq')} className="hover:text-[#062016]">FAQS</button></li>
+                <li><button onClick={handleAction} className="hover:text-[#062016]">Help Center</button></li>
                 <li><button onClick={handleAction} className="hover:text-[#062016]">Terms & Conditions</button></li>
                 <li><button onClick={handleAction} className="hover:text-[#062016]">Privacy Policy</button></li>
-                <li><button onClick={handleAction} className="hover:text-[#062016]">Help Center</button></li>
               </ul>
             </div>
           </div>

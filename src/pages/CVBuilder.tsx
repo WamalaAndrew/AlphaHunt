@@ -5,7 +5,7 @@ import { ArrowLeft, Plus, Trash2, Sparkles, Download, FileText } from 'lucide-re
 import { AlphaLogo } from '../components/AlphaLogo';
 import { NotificationBadge } from '../components/NotificationBadge';
 import { GoogleGenAI } from '@google/genai';
-import { useReactToPrint } from 'react-to-print';
+import html2pdf from 'html2pdf.js';
 import { motion } from 'motion/react';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '../components/Spinner';
@@ -64,15 +64,18 @@ export default function CVBuilder() {
     skills: '',
   });
 
-  const handlePrint = useReactToPrint({
-    contentRef: cvRef,
-    documentTitle: `${cvData.personal.fullName.replace(/\s+/g, '_')}_CV`,
-    onPrintError: (error) => console.error("Print error:", error),
-  });
-
   const triggerPrint = () => {
     if (cvRef.current) {
-      handlePrint();
+      const element = cvRef.current;
+      const opt = {
+        margin:       0,
+        filename:     `${cvData.personal.fullName.replace(/\s+/g, '_')}_CV.pdf`,
+        image:        { type: 'jpeg' as const, quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' as const }
+      };
+      
+      html2pdf().set(opt).from(element).save();
     } else {
       console.error("CV content not ready for printing.");
     }

@@ -192,6 +192,19 @@ export default function Messages() {
         lastMessageTime: serverTimestamp(),
         updatedAt: serverTimestamp()
       });
+      
+      // Send notification to the other participant
+      const otherParticipantId = activeChat.participants.find(id => id !== user.uid);
+      if (otherParticipantId) {
+        await addDoc(collection(db, 'notifications'), {
+          userId: otherParticipantId,
+          type: 'message',
+          message: `New message from ${user.displayName || 'Someone'}`,
+          read: false,
+          createdAt: serverTimestamp(),
+          link: `/messages?userId=${user.uid}`
+        });
+      }
     } catch (error) {
       handleFirestoreError(error, OperationType.WRITE, `chats/${activeChat.id}/messages`);
     }

@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { db } from '../firebase';
 import { collection, getDocs, addDoc, serverTimestamp, query } from 'firebase/firestore';
 import { GoogleGenAI } from '@google/genai';
-import { Briefcase, Plus, Search, MapPin, DollarSign, Building, ArrowLeft, Filter, CheckCircle, Bell, Sparkles, Bookmark } from 'lucide-react';
+import { Briefcase, Plus, Search, MapPin, DollarSign, Building, ArrowLeft, Filter, CheckCircle, Bell, Sparkles, Bookmark, Share2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { AlphaLogo } from '../components/AlphaLogo';
 import { handleFirestoreError, OperationType } from '../contexts/AuthContext';
@@ -22,10 +22,10 @@ export default function JobBoard() {
   // Search and Filter state
   const [searchQuery, setSearchQuery] = useState('');
   const [filterLocation, setFilterLocation] = useState('london');
-
-  useEffect(() => {
-    fetchJobs();
-  }, []);
+  const [filterType, setFilterType] = useState('All');
+  const [filterCategory, setFilterCategory] = useState('All');
+  const [filterSkills, setFilterSkills] = useState('');
+  const [aiSuggestions, setAiSuggestions] = useState<any[]>([]);
 
   // Job Alert state
   const [showAlertModal, setShowAlertModal] = useState(false);
@@ -47,9 +47,9 @@ export default function JobBoard() {
   const [salaryRange, setSalaryRange] = useState('');
   const [type, setType] = useState('Full-time');
 
-  const [filterType, setFilterType] = useState('All');
-  const [filterSkills, setFilterSkills] = useState('');
-  const [aiSuggestions, setAiSuggestions] = useState<any[]>([]);
+  useEffect(() => {
+    fetchJobs();
+  }, [filterCategory]);
 
   const fetchJobs = async () => {
     setLoading(true);
@@ -67,7 +67,16 @@ export default function JobBoard() {
         .filter((job: any) => job.status !== 'pending_payment') as any[];
 
       // Fetch Adzuna jobs
-      const realJobs = await fetchRealJobs(searchQuery, filterLocation, 'gb'); // You can make this dynamic if needed
+      let apiQuery = searchQuery;
+      let apiLocation = filterLocation;
+      
+      if (filterCategory === 'S4/S6') {
+        apiQuery = apiQuery ? `${apiQuery} entry level` : 'entry level OR customer service OR clerk';
+      } else if (filterCategory === 'UAE') {
+        apiLocation = 'UAE';
+      }
+      
+      const realJobs = await fetchRealJobs(apiQuery, apiLocation, 'gb'); // You can make this dynamic if needed
       
       // Combine and sort
       const allJobs = [...firestoreJobs, ...realJobs].sort((a, b) => {
@@ -131,6 +140,51 @@ export default function JobBoard() {
     }
   };
 
+  const handleShareJob = async (job: any, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `${job.title} at ${job.company}`,
+          text: `Check out this job opportunity: ${job.title} at ${job.company} in ${job.location}`,
+          url: job.url || window.location.href,
+        });
+      } catch (error: any) {
+        if (error.name !== 'AbortError') {
+          console.error('Error sharing job:', error);
+        }
+      }
+    } else {
+      // Fallback for browsers that don't support Web Share API
+      navigator.clipboard.writeText(job.url || window.location.href);
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
+    }
+  };
+
+  const handleQuickApply = async (job: any, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!user) return;
+    
+    // In a real app, this would send the user's CV to the employer
+    // For now, we'll just show a success message and save it to applications
+    try {
+      await addDoc(collection(db, 'applications'), {
+        userId: user.uid,
+        jobId: job.id,
+        jobTitle: job.title,
+        company: job.company,
+        status: 'applied',
+        appliedAt: serverTimestamp(),
+        isAiQuickApply: true
+      });
+      
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
+    } catch (error) {
+      handleFirestoreError(error, OperationType.WRITE, 'applications');
+    }
+  };
   const handleSaveJob = async (job: any, e: React.MouseEvent) => {
     e.stopPropagation();
     if (!user) return;
@@ -266,7 +320,7 @@ export default function JobBoard() {
     }
   };
 
-  // Filter jobs based on search query, type, and skills
+  // Filter jobs based on search query, type, category, and skills
   let filteredJobs = jobs.filter(job => {
     const searchLower = searchQuery.toLowerCase();
     const matchesSearch = 
@@ -276,6 +330,21 @@ export default function JobBoard() {
       
     const matchesType = filterType === 'All' || job.type === filterType;
     
+    let matchesCategory = true;
+    if (filterCategory === 'S4/S6') {
+      matchesCategory = !job.isLocal || 
+                        job.description.toLowerCase().includes('s4') || 
+                        job.description.toLowerCase().includes('s6') ||
+                        (job as any).requirements?.some((r: string) => r.toLowerCase().includes('s4') || r.toLowerCase().includes('s6'));
+    } else if (filterCategory === 'UAE') {
+      matchesCategory = !job.isLocal || 
+                        job.location.toLowerCase().includes('uae') || 
+                        job.location.toLowerCase().includes('dubai') || 
+                        job.location.toLowerCase().includes('abu dhabi') ||
+                        job.location.toLowerCase().includes('united arab emirates') ||
+                        job.title.toLowerCase().includes('uae');
+    }
+    
     const skillsArray = filterSkills.split(',').map(s => s.trim().toLowerCase()).filter(s => s !== '');
     const jobSkills = (job as any).skills ? ((job as any).skills as string[]).map(s => s.toLowerCase()) : [];
     const jobDesc = job.description.toLowerCase();
@@ -284,7 +353,7 @@ export default function JobBoard() {
       jobSkills.includes(skill) || jobDesc.includes(skill)
     );
 
-    return matchesSearch && matchesType && matchesSkills;
+    return matchesSearch && matchesType && matchesCategory && matchesSkills;
   });
 
   return (
@@ -293,7 +362,7 @@ export default function JobBoard() {
       {showToast && (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-[#bef264] text-[#062016] px-6 py-3 rounded-full shadow-lg flex items-center gap-2 animate-in fade-in slide-in-from-top-4 font-bold">
           <CheckCircle className="w-5 h-5" />
-          <span>Job posted successfully!</span>
+          <span>Action successful!</span>
         </div>
       )}
       {alertSuccess && (
@@ -433,7 +502,7 @@ export default function JobBoard() {
         )}
 
         {/* Filters */}
-        <div className="bg-white p-5 md:p-6 rounded-[2rem] border border-[#062016]/10 shadow-sm mb-8 grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+        <div className="bg-white p-5 md:p-6 rounded-[2rem] border border-[#062016]/10 shadow-sm mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           <div className="space-y-1.5">
             <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Location</label>
             <div className="relative">
@@ -446,6 +515,18 @@ export default function JobBoard() {
                 className="w-full border border-[#062016]/10 rounded-xl pl-9 pr-4 py-2 focus:ring-2 focus:ring-[#bef264] outline-none text-sm"
               />
             </div>
+          </div>
+          <div className="space-y-1.5">
+            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Category</label>
+            <select 
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className="w-full border border-[#062016]/10 rounded-xl px-4 py-2 focus:ring-2 focus:ring-[#bef264] outline-none appearance-none bg-white cursor-pointer text-sm"
+            >
+              <option value="All">All Categories</option>
+              <option value="S4/S6">S4/S6 Leavers</option>
+              <option value="UAE">UAE Jobs</option>
+            </select>
           </div>
           <div className="space-y-1.5">
             <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Job Type</label>
@@ -494,9 +575,15 @@ export default function JobBoard() {
                 >
                   <h4 className="font-bold text-[#062016] mb-1 text-lg group-hover:text-black">{job.title}</h4>
                   <p className="text-sm text-slate-500 mb-4 font-medium">{job.company} • {job.location}</p>
-                  <div className="bg-white/80 p-3 rounded-xl text-sm text-[#062016] font-semibold border border-[#bef264]/10 leading-relaxed">
+                  <div className="bg-white/80 p-3 rounded-xl text-sm text-[#062016] font-semibold border border-[#bef264]/10 leading-relaxed mb-4">
                     {job.matchReason}
                   </div>
+                  <button 
+                    onClick={(e) => handleQuickApply(job, e)}
+                    className="w-full bg-[#062016] text-white py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-black transition-all shadow-lg shadow-[#062016]/10 text-sm"
+                  >
+                    <Sparkles className="w-4 h-4 text-[#bef264]" /> Quick Apply with AI CV
+                  </button>
                 </div>
               ))}
             </div>
@@ -539,6 +626,13 @@ export default function JobBoard() {
                         <DollarSign className="w-3.5 h-3.5" /> {job.salaryRange}
                       </span>
                     )}
+                    <button 
+                      onClick={(e) => handleShareJob(job, e)}
+                      className="p-2.5 text-slate-300 hover:text-[#062016] hover:bg-[#bef264]/10 rounded-xl transition-all"
+                      title="Share Job"
+                    >
+                      <Share2 className="w-5 h-5" />
+                    </button>
                     <button 
                       onClick={(e) => handleSaveJob(job, e)}
                       className="p-2.5 text-slate-300 hover:text-[#062016] hover:bg-[#bef264]/10 rounded-xl transition-all"

@@ -6,6 +6,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { FirebaseDebugger } from './components/FirebaseDebugger';
+import { Toaster } from 'react-hot-toast';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -50,6 +51,26 @@ export default function App() {
   return (
     <AuthProvider>
       <FirebaseDebugger />
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#062016',
+            color: '#fff',
+            borderRadius: '16px',
+            padding: '16px',
+            boxShadow: '0 10px 25px -5px rgba(6, 32, 22, 0.2)',
+            fontWeight: 'bold',
+          },
+          success: {
+            iconTheme: {
+              primary: '#bef264',
+              secondary: '#062016',
+            },
+          },
+        }}
+      />
       <Router>
         <Routes>
           <Route path="/" element={<Landing />} />
