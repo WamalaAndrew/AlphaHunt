@@ -259,7 +259,7 @@ export default function Feed() {
     if (isSharing) return;
     
     const shareData = {
-      title: `Post by ${post.authorName} on AlphaHunt`,
+      title: `Post by ${post.authorName} on BrighterMonday`,
       text: post.content,
       url: window.location.href
     };

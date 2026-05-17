@@ -98,7 +98,7 @@ export const PaymentStatus = () => {
               <CheckCircle className="w-10 h-10 text-[#062016]" />
             </div>
             <h2 className="text-3xl font-extrabold text-[#062016] mb-2 tracking-tight">Payment Successful!</h2>
-            <p className="text-slate-500 mb-6 font-medium">Your job has been posted and is now live on AlphaHunt.</p>
+            <p className="text-slate-500 mb-6 font-medium">Your job has been posted and is now live on BrighterMonday.</p>
             {trackingId && (
               <div className="bg-[#062016]/5 p-4 rounded-xl mb-8">
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Transaction ID</p>

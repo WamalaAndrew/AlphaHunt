@@ -54,10 +54,10 @@ export default function Landing() {
   const faqs = [
     {
       question: "How does the AI matching work?",
-      answer: "AlphaHunt uses Gemini AI to analyze your skills, experience, and preferences. It then compares this data with thousands of job listings to recommend the most relevant opportunities for you."
+      answer: "BrighterMonday uses Gemini AI to analyze your skills, experience, and preferences. It then compares this data with thousands of job listings to recommend the most relevant opportunities for you."
     },
     {
-      question: "Is AlphaHunt free for job seekers?",
+      question: "Is BrighterMonday free for job seekers?",
       answer: "Yes! Job seekers can browse, apply for jobs, and receive AI recommendations for free. We also offer premium career coaching services for those looking for extra support."
     },
     {
@@ -77,7 +77,7 @@ export default function Landing() {
             <div className="bg-[#bef264] p-1.5 rounded-lg">
               <AlphaLogo className="w-5 h-5 text-[#062016]" />
             </div>
-            <span className="text-lg md:text-xl font-extrabold text-white tracking-tight">AlphaHunt</span>
+            <span className="text-lg md:text-xl font-extrabold text-white tracking-tight">BrighterMonday</span>
           </div>
           
           <div className="hidden lg:flex items-center gap-8 text-sm font-bold text-white/70">
@@ -302,7 +302,7 @@ export default function Landing() {
                 Streamline hiring with <br /> AI precision
               </h2>
               <p className="text-slate-500 mb-10 leading-relaxed font-medium">
-                AlphaHunt's intelligent platform removes the friction from recruiting, connecting top talent with leading companies instantly and accurately.
+                BrighterMonday's intelligent platform removes the friction from recruiting, connecting top talent with leading companies instantly and accurately.
               </p>
               
               <div className="space-y-8">
@@ -428,7 +428,7 @@ export default function Landing() {
                 <div className="bg-[#062016] rounded-3xl p-8 text-white text-center">
                   <h3 className="text-2xl font-bold mb-4">Your Next Great Hire Is Just A Click Away!</h3>
                   <p className="text-slate-400 text-sm mb-8 leading-relaxed">Post your job today and quickly connect with top talent. Our user-friendly platform streamlines hiring.</p>
-                  <button onClick={handleAction} className="bg-[#bef264] text-[#062016] w-full py-3 rounded-full font-bold text-sm">Post Job On AlphaHunt</button>
+                  <button onClick={handleAction} className="bg-[#bef264] text-[#062016] w-full py-3 rounded-full font-bold text-sm">Post Job On BrighterMonday</button>
                 </div>
                 
                 <div className="card p-8">
@@ -498,16 +498,16 @@ export default function Landing() {
         {/* Testimonials Section */}
         <section className="py-32 px-6 bg-[#fefce8]">
           <div className="max-w-7xl mx-auto text-center">
-            <h2 className="text-4xl font-extrabold text-[#062016] mb-4">Why professionals love <br /> AlphaHunt</h2>
+            <h2 className="text-4xl font-extrabold text-[#062016] mb-4">Why professionals love <br /> BrighterMonday</h2>
             <p className="text-slate-500 font-medium mb-16">Join thousands of job seekers and employers who have transformed <br /> their careers and businesses with our AI platform.</p>
             
             <button onClick={handleAction} className="bg-[#bef264] text-[#062016] px-8 py-3 rounded-full font-bold text-sm mb-20">Read Success Stories</button>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { name: 'Sarah N.', role: 'HR Director, TechCorp', text: 'AlphaHunt reduced our time-to-hire by 40%. The AI matching is incredibly accurate.' },
+                { name: 'Sarah N.', role: 'HR Director, TechCorp', text: 'BrighterMonday reduced our time-to-hire by 40%. The AI matching is incredibly accurate.' },
                 { name: 'David K.', role: 'Senior Developer', text: 'I found my dream job within a week of creating my profile. The career coach feature was a game-changer.' },
-                { name: 'Grace M.', role: 'Startup Founder', text: 'As a growing startup, finding the right talent quickly is crucial. AlphaHunt delivered beyond our expectations.' },
+                { name: 'Grace M.', role: 'Startup Founder', text: 'As a growing startup, finding the right talent quickly is crucial. BrighterMonday delivered beyond our expectations.' },
                 { name: 'James O.', role: 'Marketing Manager', text: 'The platform is intuitive, and the quality of opportunities is unmatched in the region.' },
               ].map((t, i) => (
                 <div key={i} className="bg-white rounded-3xl p-8 text-left shadow-sm border border-slate-100">
@@ -588,7 +588,7 @@ export default function Landing() {
             <div>
               <span className="bg-white/10 text-white px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6 inline-block border border-white/20">Workflow</span>
               <h2 className="text-4xl font-extrabold text-white mb-6 leading-tight">Seamlessly integrates <br /> with your tools</h2>
-              <p className="text-slate-300 font-medium mb-10 leading-relaxed">Connect AlphaHunt with the apps your team already uses. From communication to project management, we've got you covered.</p>
+              <p className="text-slate-300 font-medium mb-10 leading-relaxed">Connect BrighterMonday with the apps your team already uses. From communication to project management, we've got you covered.</p>
               <button onClick={handleAction} className="bg-[#bef264] text-[#062016] px-8 py-3 rounded-full font-bold text-sm shadow-lg hover:bg-[#a3e635] transition-colors">View Integrations</button>
             </div>
           </div>
@@ -642,7 +642,7 @@ export default function Landing() {
               >
                 <div className="inline-flex items-center gap-2 bg-[#bef264]/20 border border-[#bef264]/40 rounded-full px-4 py-2 mb-6">
                   <Sparkles className="w-4 h-4 text-[#062016]" />
-                  <span className="text-[#062016] text-xs font-bold uppercase tracking-wider">The AlphaHunt Vibe</span>
+                  <span className="text-[#062016] text-xs font-bold uppercase tracking-wider">The BrighterMonday Vibe</span>
                 </div>
                 <h2 className="text-4xl md:text-5xl font-extrabold mb-6 leading-tight text-[#062016]">
                   More than just a job board. <br />
@@ -745,7 +745,7 @@ export default function Landing() {
                 <div className="bg-[#062016] p-1.5 rounded-lg">
                   <AlphaLogo className="w-5 h-5 text-[#bef264]" />
                 </div>
-                <span className="text-2xl font-extrabold text-[#062016] tracking-tight">AlphaHunt</span>
+                <span className="text-2xl font-extrabold text-[#062016] tracking-tight">BrighterMonday</span>
               </div>
               <p className="text-slate-500 font-medium leading-relaxed max-w-sm mb-8">
                 The premier AI-powered job board and career platform connecting top talent with leading employers across East Africa.
@@ -790,7 +790,7 @@ export default function Landing() {
           </div>
           
           <div className="pt-12 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-slate-400 text-sm font-bold">© {new Date().getFullYear()} AlphaHunt. All rights reserved.</p>
+            <p className="text-slate-400 text-sm font-bold">© {new Date().getFullYear()} BrighterMonday. All rights reserved.</p>
             <div className="flex gap-8 text-sm font-bold text-slate-400">
               <a href="#" className="hover:text-[#062016]">Terms</a>
               <a href="#" className="hover:text-[#062016]">Privacy</a>

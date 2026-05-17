@@ -104,7 +104,7 @@ export default function Dashboard() {
     { id: 'bookings', icon: <Briefcase className="w-5 h-5" />, title: 'Manage Bookings', description: 'View and manage your upcoming coaching sessions.' },
     { id: 'messages', icon: <MessageSquare className="w-5 h-5" />, title: 'Messages', description: 'Chat with your clients and leads.' },
     { id: 'earnings', icon: <FileText className="w-5 h-5" />, title: 'Earnings & Payouts', description: 'Track your income and request payouts.' },
-    { id: 'advice', icon: <MessageSquare className="w-5 h-5" />, title: 'AlphaHunt AI', description: 'Get AI advice on how to grow your coaching business.' },
+    { id: 'advice', icon: <MessageSquare className="w-5 h-5" />, title: 'BrighterMonday AI', description: 'Get AI advice on how to grow your coaching business.' },
     { id: 'settings', icon: <Settings className="w-5 h-5" />, title: 'Settings', description: 'Update your profile and preferences.' },
   ];
 
@@ -113,7 +113,7 @@ export default function Dashboard() {
     { id: 'jobs', icon: <Briefcase className="w-5 h-5" />, title: 'Employer Dashboard', description: 'Post new jobs and manage existing listings.' },
     { id: 'applications', icon: <Users className="w-5 h-5" />, title: 'View Applicants', description: 'Review candidates who applied to your jobs.' },
     { id: 'messages', icon: <MessageSquare className="w-5 h-5" />, title: 'Messages', description: 'Chat directly with candidates.' },
-    { id: 'advice', icon: <MessageSquare className="w-5 h-5" />, title: 'AlphaHunt AI', description: 'Get AI help writing job descriptions and interview questions.' },
+    { id: 'advice', icon: <MessageSquare className="w-5 h-5" />, title: 'BrighterMonday AI', description: 'Get AI help writing job descriptions and interview questions.' },
     { id: 'settings', icon: <Settings className="w-5 h-5" />, title: 'Settings', description: 'Update your profile and preferences.' },
   ];
 
@@ -224,7 +224,7 @@ export default function Dashboard() {
                   <div className="bg-[#bef264] p-2 rounded-xl">
                     <AlphaLogo className="w-5 h-5 text-[#062016]" />
                   </div>
-                  <h2 className="text-lg font-bold text-white">AlphaHunt</h2>
+                  <h2 className="text-lg font-bold text-white">BrighterMonday</h2>
                 </div>
                 <button 
                   onClick={() => setIsMobileSidebarOpen(false)}
@@ -315,7 +315,7 @@ export default function Dashboard() {
             <AlphaLogo className="w-6 h-6 text-[#062016]" />
           </div>
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-white">AlphaHunt</h1>
+            <h1 className="text-xl font-bold tracking-tight text-white">BrighterMonday</h1>
             <p className="text-xs text-[#bef264] font-bold tracking-wide uppercase">Premium Job Board</p>
           </div>
         </div>
@@ -422,7 +422,7 @@ export default function Dashboard() {
             <div className="bg-white rounded-2xl shadow-sm border border-[#062016]/10 p-6">
               <h3 className="font-bold text-lg text-[#062016] mb-4 flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-[#bef264]" />
-                AlphaHunt AI
+                BrighterMonday AI
               </h3>
               <div className="space-y-4">
                 <div className="bg-[#062016]/5 rounded-xl p-4 border border-[#062016]/5">

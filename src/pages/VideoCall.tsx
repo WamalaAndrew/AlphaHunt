@@ -18,7 +18,7 @@ export default function VideoCall() {
       setRoomName(room);
     } else {
       // Generate a random room name if none provided
-      const newRoom = `AlphaHunt-${Math.random().toString(36).substring(2, 12)}`;
+      const newRoom = `BrighterMonday-${Math.random().toString(36).substring(2, 12)}`;
       navigate(`/video-call?room=${newRoom}`, { replace: true });
       setRoomName(newRoom);
     }
@@ -51,7 +51,7 @@ export default function VideoCall() {
           </button>
           <div className="flex items-center gap-2 text-white">
             <Video className="w-5 h-5 text-amber-500" />
-            <h1 className="text-lg font-bold tracking-tight">AlphaHunt Video Room</h1>
+            <h1 className="text-lg font-bold tracking-tight">BrighterMonday Video Room</h1>
           </div>
         </div>
         <div className="flex items-center gap-3">

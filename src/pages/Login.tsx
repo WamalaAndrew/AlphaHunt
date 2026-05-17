@@ -103,7 +103,7 @@ export default function Login() {
             <div className="bg-[#bef264] p-2 rounded-xl">
               <AlphaLogo className="w-5 h-5 text-[#062016]" />
             </div>
-            <span className="text-xl font-bold text-white tracking-tight">AlphaHunt</span>
+            <span className="text-xl font-bold text-white tracking-tight">BrighterMonday</span>
           </div>
         </div>
       </header>

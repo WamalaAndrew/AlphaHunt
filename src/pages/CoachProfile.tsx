@@ -177,7 +177,7 @@ export default function CoachProfile() {
 
               <div className="space-y-1.5">
                 <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">Client Testimonials (Separate each with a blank line)</label>
-                <textarea value={testimonials} onChange={e => setTestimonials(e.target.value)} rows={5} className="w-full border border-[#062016]/10 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#bef264] outline-none font-medium resize-none" placeholder='"AlphaHunt helped me land my dream job!" - Sarah M.&#10;&#10;"The interview prep was invaluable." - John D.'></textarea>
+                <textarea value={testimonials} onChange={e => setTestimonials(e.target.value)} rows={5} className="w-full border border-[#062016]/10 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#bef264] outline-none font-medium resize-none" placeholder='"BrighterMonday helped me land my dream job!" - Sarah M.&#10;&#10;"The interview prep was invaluable." - John D.'></textarea>
               </div>
 
               <div className="pt-6 flex items-center justify-end gap-6">

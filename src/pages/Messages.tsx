@@ -339,7 +339,7 @@ export default function Messages() {
                 </div>
                 
                 <button
-                  onClick={() => navigate(`/video-call?room=AlphaHunt-${activeChat.id}`)}
+                  onClick={() => navigate(`/video-call?room=BrighterMonday-${activeChat.id}`)}
                   className="flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-amber-600 bg-slate-50 hover:bg-amber-50 px-4 py-2 rounded-xl transition-colors border border-slate-200 hover:border-amber-200 shadow-sm"
                 >
                   <Video className="w-4 h-4" />

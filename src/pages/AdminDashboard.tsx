@@ -135,7 +135,7 @@ export default function AdminDashboard() {
       <main className="max-w-6xl mx-auto p-6 mt-6">
         <div className="mb-8">
           <h2 className="text-3xl font-extrabold text-[#062016] tracking-tight">Registered Users</h2>
-          <p className="text-slate-500 mt-2 font-medium">Manage and track all users on the AlphaHunt platform.</p>
+          <p className="text-slate-500 mt-2 font-medium">Manage and track all users on the BrighterMonday platform.</p>
         </div>
 
         <div className="bg-white rounded-[2rem] shadow-sm border border-[#062016]/10 overflow-hidden">

@@ -10,7 +10,7 @@ import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
 const getSystemInstruction = (feature: string, jobDetails?: any, userRole?: string) => {
-  const baseInstruction = `You are AlphaHunt — an AI career coach and networking assistant built specifically for Ugandan job seekers, career coaches, and employers. You are friendly, encouraging, practical, and speak in simple, clear English that feels natural to East African users. Occasionally use light Luganda phrases like "Webale" (thank you) or "Kale" (okay/alright) to feel local and warm — but keep it professional.
+  const baseInstruction = `You are BrighterMonday — an AI career coach and networking assistant built specifically for Ugandan job seekers, career coaches, and employers. You are friendly, encouraging, practical, and speak in simple, clear English that feels natural to East African users. Occasionally use light Luganda phrases like "Webale" (thank you) or "Kale" (okay/alright) to feel local and warm — but keep it professional.
 
 YOUR MISSION:
 Help users in Uganda find jobs, write better CVs, prepare for interviews, write cover letters, and build their careers — all for free or at low cost.
@@ -147,7 +147,7 @@ export default function Chat() {
       case 'advice':
         return `Hello ${user?.displayName?.split(' ')[0] || ''}! Welcome to Career Advice. 🇺🇬\n\nI'm here to answer any career questions you have. How can I help you today?`;
       default:
-        return `Hello ${user?.displayName?.split(' ')[0] || ''}! Welcome to AlphaHunt — your personal career coach for Uganda. 🇺🇬\n\nI can help you with:\n✅ Building your CV\n✅ Practising for interviews\n✅ Writing cover letters\n✅ Finding jobs in Uganda\n✅ Figuring out what skills to learn next\n\nWhat would you like help with today? Just tell me in your own words!`;
+        return `Hello ${user?.displayName?.split(' ')[0] || ''}! Welcome to BrighterMonday — your personal career coach for Uganda. 🇺🇬\n\nI can help you with:\n✅ Building your CV\n✅ Practising for interviews\n✅ Writing cover letters\n✅ Finding jobs in Uganda\n✅ Figuring out what skills to learn next\n\nWhat would you like help with today? Just tell me in your own words!`;
     }
   };
 
@@ -235,7 +235,7 @@ export default function Chat() {
               <AlphaLogo className="w-5 h-5 text-[#062016]" />
             </div>
             <div>
-              <h1 className="text-lg md:text-xl font-bold text-white tracking-tight">AlphaHunt AI</h1>
+              <h1 className="text-lg md:text-xl font-bold text-white tracking-tight">BrighterMonday AI</h1>
               <p className="text-xs text-[#bef264] hidden sm:block font-bold">Your Ugandan Career Coach 🇺🇬</p>
             </div>
           </div>

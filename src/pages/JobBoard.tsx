@@ -445,7 +445,7 @@ export default function JobBoard() {
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Company</label>
-                    <input type="text" placeholder="e.g. AlphaHunt" value={company} onChange={e => setCompany(e.target.value)} className="border border-[#062016]/10 rounded-xl px-4 py-3 w-full focus:ring-2 focus:ring-[#bef264] outline-none" required />
+                    <input type="text" placeholder="e.g. BrighterMonday" value={company} onChange={e => setCompany(e.target.value)} className="border border-[#062016]/10 rounded-xl px-4 py-3 w-full focus:ring-2 focus:ring-[#bef264] outline-none" required />
                   </div>
                 </div>
                 <div className="space-y-1.5">
