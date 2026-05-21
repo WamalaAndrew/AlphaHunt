@@ -8,6 +8,10 @@ import {
 import { useEffect, useState } from 'react';
 import { AlphaLogo } from '../components/AlphaLogo';
 import { motion, AnimatePresence } from 'motion/react';
+import heroImage from '../assets/images/hero_office_collab_1779389615354.png';
+import avatarDavid from '../assets/images/avatar_david_1779390821206.png';
+import avatarSarah from '../assets/images/avatar_sarah_1779390838977.png';
+import avatarElijah from '../assets/images/avatar_elijah_1779390854297.png';
 
 export default function Landing() {
   const { user } = useAuth();
@@ -138,7 +142,7 @@ export default function Landing() {
           {/* Background Image with Overlay */}
           <div className="absolute inset-0 z-0">
             <img 
-              src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=60&w=1600" 
+              src={heroImage} 
               alt="Vibrant Office Community" 
               className="w-full h-full object-cover object-right md:object-center"
               referrerPolicy="no-referrer"
@@ -232,7 +236,7 @@ export default function Landing() {
                   className="relative z-10"
                 >
                   <div className="bg-white/5 backdrop-blur-sm border border-white/10 p-4 rounded-[2.5rem] shadow-2xl">
-                    <div className="bg-[#062016] rounded-[2rem] p-8 border border-[#bef264]/20">
+                    <div className="bg-[#062016]/90 backdrop-blur-md rounded-[2rem] p-8 border border-[#bef264]/20">
                       <div className="flex items-center gap-4 mb-8">
                         <div className="bg-[#bef264] p-3 rounded-2xl">
                           <Users className="w-8 h-8 text-[#062016]" />
@@ -243,13 +247,23 @@ export default function Landing() {
                         </div>
                       </div>
                       <div className="space-y-4">
-                        {[1, 2, 3].map((i) => (
-                          <div key={i} className="bg-white/5 rounded-xl p-4 flex items-center justify-between border border-white/5">
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-full bg-slate-700"></div>
-                              <div className="h-2 w-24 bg-slate-600 rounded"></div>
+                        {[
+                          { name: 'David Odongo', role: 'UX Designer', img: avatarDavid },
+                          { name: 'Sarah Namukasa', role: 'Product Manager', img: avatarSarah },
+                          { name: 'Elijah K.', role: 'Frontend Engineer', img: avatarElijah },
+                        ].map((user, i) => (
+                          <div key={i} className="bg-white/5 rounded-xl p-4 flex items-center justify-between border border-white/5 transition-colors hover:bg-white/10 cursor-pointer">
+                            <div className="flex items-center gap-4">
+                              <img src={user.img} alt={user.name} className="w-12 h-12 rounded-full object-cover border-2 border-[#bef264]/20" referrerPolicy="no-referrer" />
+                              <div>
+                                <h4 className="text-white text-sm font-bold">{user.name}</h4>
+                                <p className="text-slate-400 text-xs">{user.role}</p>
+                              </div>
                             </div>
-                            <div className="h-2 w-12 bg-[#bef264]/20 rounded"></div>
+                            <div className="text-[#bef264] text-[10px] font-bold uppercase tracking-wider px-2 py-1 bg-[#bef264]/10 rounded border border-[#bef264]/20 flex items-center gap-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#bef264] animate-pulse"></span>
+                              Active
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -396,12 +410,12 @@ export default function Landing() {
             <div className="grid lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2 grid md:grid-cols-2 gap-6">
                 {[
-                  { title: 'Senior Product Designer', company: 'Safaricom', location: 'Nairobi, KE', salary: 'KSh 250k - 350k', logo: 'https://picsum.photos/seed/safaricom/100/100' },
-                  { title: 'Full Stack Developer', company: 'Andela', location: 'Kigali, RW', salary: '$3k - $5k', logo: 'https://picsum.photos/seed/andela/100/100' },
-                  { title: 'Marketing Director', company: 'MTN Group', location: 'Kampala, UG', salary: 'UGX 5M - 8M', logo: 'https://picsum.photos/seed/mtn/100/100' },
-                  { title: 'UX Researcher', company: 'Flutterwave', location: 'Remote', salary: '$4k - $6k', logo: 'https://picsum.photos/seed/flutterwave/100/100' },
-                  { title: 'Product Manager', company: 'SafeBoda', location: 'Kampala, UG', salary: 'UGX 4M - 6M', logo: 'https://picsum.photos/seed/safeboda/100/100' },
-                  { title: 'Data Scientist', company: 'M-KOPA', location: 'Nairobi, KE', salary: 'KSh 300k - 400k', logo: 'https://picsum.photos/seed/mkopa/100/100' },
+                  { title: 'Senior Product Designer', company: 'Safaricom', location: 'Nairobi, KE', salary: 'KSh 250k - 350k', logo: 'https://www.google.com/s2/favicons?domain=safaricom.co.ke&sz=128' },
+                  { title: 'Full Stack Developer', company: 'Andela', location: 'Kigali, RW', salary: '$3k - $5k', logo: 'https://www.google.com/s2/favicons?domain=andela.com&sz=128' },
+                  { title: 'Marketing Director', company: 'MTN Group', location: 'Kampala, UG', salary: 'UGX 5M - 8M', logo: 'https://www.google.com/s2/favicons?domain=mtn.com&sz=128' },
+                  { title: 'UX Researcher', company: 'Flutterwave', location: 'Remote', salary: '$4k - $6k', logo: 'https://www.google.com/s2/favicons?domain=flutterwave.com&sz=128' },
+                  { title: 'Product Manager', company: 'SafeBoda', location: 'Kampala, UG', salary: 'UGX 4M - 6M', logo: 'https://www.google.com/s2/favicons?domain=safeboda.com&sz=128' },
+                  { title: 'Data Scientist', company: 'M-KOPA', location: 'Nairobi, KE', salary: 'KSh 300k - 400k', logo: 'https://www.google.com/s2/favicons?domain=m-kopa.com&sz=128' },
                 ].map((job, i) => (
                   <div key={i} className="card p-6 flex flex-col justify-between group">
                     <div>
@@ -435,10 +449,10 @@ export default function Landing() {
                   <h3 className="text-lg font-bold text-[#062016] mb-6">Featured Companies</h3>
                   <div className="space-y-6">
                     {[
-                      { name: 'Safaricom', loc: 'Nairobi, KE', logo: 'https://picsum.photos/seed/safaricom/40/40' },
-                      { name: 'MTN Group', loc: 'Kampala, UG', logo: 'https://picsum.photos/seed/mtn/40/40' },
-                      { name: 'Flutterwave', loc: 'Lagos, NG', logo: 'https://picsum.photos/seed/flutterwave/40/40' },
-                      { name: 'Andela', loc: 'Kigali, RW', logo: 'https://picsum.photos/seed/andela/40/40' },
+                      { name: 'Safaricom', loc: 'Nairobi, KE', logo: 'https://www.google.com/s2/favicons?domain=safaricom.co.ke&sz=128' },
+                      { name: 'MTN Group', loc: 'Kampala, UG', logo: 'https://www.google.com/s2/favicons?domain=mtn.com&sz=128' },
+                      { name: 'Flutterwave', loc: 'Lagos, NG', logo: 'https://www.google.com/s2/favicons?domain=flutterwave.com&sz=128' },
+                      { name: 'Andela', loc: 'Kigali, RW', logo: 'https://www.google.com/s2/favicons?domain=andela.com&sz=128' },
                     ].map((comp, i) => (
                       <div key={i} className="flex items-center gap-4">
                         <img src={comp.logo} alt={comp.name} className="w-10 h-10 rounded-full object-cover" referrerPolicy="no-referrer" loading="lazy" />
@@ -571,15 +585,15 @@ export default function Landing() {
               <h3 className="text-3xl font-bold mb-12">Integrations with your <br /> Favorite Apps</h3>
               <div className="grid grid-cols-3 gap-4">
                 {[
-                  'https://picsum.photos/seed/slack/100/100',
-                  'https://picsum.photos/seed/zoom/100/100',
-                  'https://picsum.photos/seed/google/100/100',
-                  'https://picsum.photos/seed/notion/100/100',
-                  'https://picsum.photos/seed/figma/100/100',
-                  'https://picsum.photos/seed/github/100/100'
+                  'https://cdn.simpleicons.org/slack',
+                  'https://cdn.simpleicons.org/zoom/2D8CFF',
+                  'https://cdn.simpleicons.org/google',
+                  'https://cdn.simpleicons.org/notion/ffffff',
+                  'https://cdn.simpleicons.org/figma',
+                  'https://cdn.simpleicons.org/github/ffffff'
                 ].map((imgUrl, i) => (
                   <div key={i} className="bg-white/10 backdrop-blur-md border border-white/10 p-4 rounded-2xl flex items-center justify-center">
-                    <img src={imgUrl} alt="Integration" className="w-12 h-12 rounded-xl object-cover opacity-90 hover:opacity-100 transition-opacity" referrerPolicy="no-referrer" loading="lazy" />
+                    <img src={imgUrl} alt="Integration" className="w-8 h-8 opacity-90 hover:opacity-100 transition-opacity drop-shadow-md" referrerPolicy="no-referrer" loading="lazy" />
                   </div>
                 ))}
               </div>
